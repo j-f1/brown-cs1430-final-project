@@ -80,9 +80,13 @@
 
 \section*{Skill Assessment}
 
-Team member A
-Team member C
-Team member J
+% What are the skills of the team members? Conduct a skill assessment!
+
+Team member A: Frontend, design, project management
+
+Team member C: Backend, thinking about src implications,
+
+Team member J: Frontend, data visualization, have touched C++ several times
 
 
 \section*{Project Idea}
@@ -128,17 +132,34 @@ We plan to use OpenCV's face detection module with a pretrained model.
 
 % Who will do what? [For anonymity, please use `'`Team member 1 will...'' or, alternatively, take on daring pseudonames.]
 
-Team members: A, C, J
+Team member A:
+\begin{itemize}
+    \item skin tone/gender estimation
+    \item build the UI/CLI for interacting with this tool
+\end{itemize}
 
-- use the face detector
-- skin tone/gender estimation
-- background removal of generated faces
-- alignment of anonymous face over real one, including scaling
-- build the UI/CLI for interacting with this tool
+Team member C: alignment of anonymous face over real one, including scaling
+
+Team member J:
+\begin{itemize}
+    \item use the face detector
+    \item background removal of generated faces
+\end{itemize}
+
 
 \section*{Progress Metric}
 
 % How will you know whether you have made progress? What will you measure?
+
+``does it look good?''
+
+\begin{itemize}
+    \item skin tone matching (quantitative)
+    \item pose matching
+    \item background removal
+    \item lighting
+    \item inflicting this upon our friends and asking their opinion
+\end{itemize}
 
 \section*{Technical Problems Forseen}
 
@@ -149,5 +170,8 @@ Another problem we forsee is how well we will be able to replace faces that matc
 Another potential technical problem could be performing feature matching on a face without glasses with a face with glasses. We would need to determine a way to ignore detected features from the glasses when matching faces.
 
 \section*{Resources Needed}
+
+% Is there anything that we can do to help? E.G., resources, equipment.
+We don't think we need anything special besides guidance from our TA.
 
 \end{document}
