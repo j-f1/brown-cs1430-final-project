@@ -80,13 +80,43 @@
 
 \section*{Skill Assessment}
 
+
+
 \section*{Project Idea}
+
+Our idea is to create a tool for replacing faces in an image with a randomly-generated face. We will initially use our tool on our own images of various people, who have consented to being used in our project. If we have time and our tool is fast enough, a stretch goal is to be able to replace the face of someone through webcam.
+
+We will construct a dataset of pre-generated anonymous faces, and we will use a pre-trained model to locate faces in the input images.
+
+The bulk of our work will focus on finding a good match from the set of anonymous faces. We will attempt to select an appropriate replacement face by matching up skin tone, gender, and possibly age/expression, and angle. We will also need to extract the replacement face from its background, and potentially adjust lighting (shadows falling on the face?).
 
 \section*{Socio-Historical Context}
 
+Many people want to obscure the faces of people in an image or video to protect their privacy. This can help protect protesters, and could also serve as a fun effect for social media apps. While it is of course possible to blur or completely black out faces from an image, we hope to improve upon the status quo by performing automatic redaction, and potentially even attempting to match expressions between the source and anonymized face.
+
 \section*{Impacted Groups}
 
+% Please list three groups of people that your project could impact, and describe how it could impact them.
+
+\begin{enumerate}
+    \item Protesters would be able to use this technology to safely organize a protest without revealing their face (making it harder to identify them). Additionally, videos of protests (with all the faces replaced with different faces) would be much more emotionally charged than a sea of blurry or fully covered up faces, leading to increased international support.
+
+
+    \item This project would impact people who are in the witness protection program. People in the witness protection program are trying to avoid being seen by people who might want to harm them, they could use this tool to appear in photos and videos to remain anonymous and untraceable.
+
+
+    \item Criminals who are holding hostages could use this tool in a harmful manner. Criminals intending to make a video with demands in order to release a hostage might want a way to anonymize themselves so that they don't risk getting caught. Our tool could allow these criminals to anonymize themselves while still having a human face in the video, instead of a mask.
+
+\end{enumerate}
+
 \section*{Data}
+
+% What data will you use?
+
+We will use the set of pre-generated anonymous faces from the StyleGAN2 paper (\href{https://drive.google.com/drive/folders/1-0YhtXe_oE2ei0R471X33a_NJyY5dVge}{on Google Drive}) for replacing faces of real people in our images.
+
+We will also use a pre-trained face recognition model.
+
 
 \section*{Software/Hardware}
 
@@ -95,6 +125,10 @@
 \section*{Progress Metric}
 
 \section*{Technical Problems Forseen}
+
+One technical problem that we foresee is how computationally expensive this tool will be. It will be important to ensure that this tool runs fast enough in order to be usable, especially if we decide to implement live webcam anonymization.
+
+Another problem we forsee is how well we will be able to replace faces that match the gender of the person we are trying to anonymize.
 
 \section*{Resources Needed}
 

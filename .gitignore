@@ -5,3 +5,6 @@
 *.synctex.gz
 *.log
 *.pdf
+
+!proposal.pdf
+.vscode
