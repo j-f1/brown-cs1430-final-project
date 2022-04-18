@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import React, { useCallback, useRef, useState } from "react";
 
-const SERVER = "http://localhost.proxyman.io:5000";
+const SERVER = "http://localhost:5000";
 
 function App() {
   const [image, setImage] = useState(null);
