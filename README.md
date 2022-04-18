@@ -1,4 +1,7 @@
-[jed] this week: build a fancy web ui
+## Web UI
+
+1. In one terminal, run `flask run` in the `server/` folder
+2. In another terminal, run `npm install` and then `npm start` in the `frontend/` folder
 
 ## Resources
 
