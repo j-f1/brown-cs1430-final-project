@@ -26,21 +26,26 @@ function App() {
   }, []);
   return (
     <Row>
-      <Col className="p-4">
+      <Col lg={1} />
+      <Col md={6} lg={5} className="p-4">
         <h2>Image Input</h2>
         {image ? (
           <>
             <div style={{ position: "relative" }}>
-              <img src={"data:image/jpg;base64," + image} alt="" width={400} />
+              <img
+                src={"data:;base64," + image}
+                alt=""
+                style={{ width: "100%" }}
+              />
               {faceRects.map((faceRect, i) => (
                 <div
                   key={i}
                   style={{
                     position: "absolute",
-                    top: faceRect.y,
-                    left: faceRect.x,
-                    width: faceRect.width,
-                    height: faceRect.height,
+                    top: faceRect.y * 100 + "%",
+                    left: faceRect.x * 100 + "%",
+                    width: faceRect.width * 100 + "%",
+                    height: faceRect.height * 100 + "%",
                     border: "1px solid red",
                     cursor: "pointer",
                   }}
@@ -73,7 +78,10 @@ function App() {
           </Form>
         )}
       </Col>
-      <Col>A</Col>
+      <Col md={6} lg={5}>
+        A
+      </Col>
+      <Col lg={1} />
     </Row>
   );
 }

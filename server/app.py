@@ -27,7 +27,7 @@ def select_image():
     data = image.read()
     # TODO: read into numpy array
     # TODO: face-detect
-    faces = [{"x": 100, "y": 100, "width": 70, "height": 50}]
+    faces = [{"x": 0.1, "y": 0.2, "width": 0.05, "height": 0.1}]
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
     json.dump(
