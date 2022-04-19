@@ -4,6 +4,7 @@
 *.out
 *.synctex.gz
 *.log
+*.pyc
 
 venv
 .vscode
