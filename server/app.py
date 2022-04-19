@@ -38,3 +38,15 @@ def select_image():
         response.stream,
     )
     return response
+
+@app.route("/swap", methods=["POST"])
+def swap_faces():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    json.dump(
+        {
+            "image": "Working",
+        },
+        response.stream,
+    )
+    return response
