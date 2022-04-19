@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import React, { useCallback, useRef, useState } from "react";
+import {Button} from 'react-bootstrap';
 
 const SERVER = "http://localhost:5000";
 
@@ -24,6 +25,19 @@ function App() {
         setFaceRects(faces);
       });
   }, []);
+
+  const onSwap = useCallback((e) => {
+    e.preventDefault()
+    fetch(SERVER + "/swap", {
+      method: "POST",
+      body: image,
+    })
+      .then((res) => res.json())
+      .then(({image}) => {
+        console.log(image)
+      })
+  }, []);
+
   return (
     <Row>
       <Col lg={1} />
@@ -77,6 +91,11 @@ function App() {
             </Form.Group>
           </Form>
         )}
+        <Form onSubmit={onSwap}>
+          <Button className="mt-2" size="sm" type="submit">
+            Swap Faces
+          </Button>
+        </Form>
       </Col>
       <Col md={6} lg={5}>
         A
