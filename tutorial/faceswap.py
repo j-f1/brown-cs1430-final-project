@@ -1,8 +1,8 @@
 import cv2
 # from dlib import get_frontal_face_detector, shape_predictor 
 import dlib
-# from scipy.spatial import Delaunay
-# import numpy as np
+from scipy.spatial import Delaunay
+import numpy as np
 
 #links to useful articles 
 # https://towardsdatascience.com/cnn-based-face-detector-from-dlib-c3696195e01c
@@ -39,22 +39,24 @@ face_landmarks = dlib.shape_predictor(predictor_path)
 src_faces = face_detector(bw_src_img)
 for face in src_faces:
     src_face_landmarks = face_landmarks(bw_src_img, face)
-    # num_landmarks = src_face_landmarks.num_parts
+    num_landmarks = src_face_landmarks.num_parts
     # src_face_landmark_points = np.empty((num_landmarks, 0))
     src_face_landmark_points = []
     
-    for points in range(src_face_landmarks.num_parts):
+    for points in range(num_landmarks):
         #add x and y coordinates of every point idenitfied by the predictor 
-        # np.append(src_face_landmark_points, (src_face_landmarks.part(points).x, src_face_landmarks.part(points).y))
         src_face_landmark_points.append(src_face_landmarks.part(points).x)
         src_face_landmark_points.append(src_face_landmarks.part(points).y)
     
-        # src_face_landmark_points = np.array(src_face_landmark_points)
-        # src_face_landmark_points = np.reshape(src_face_landmark_points, (num_landmarks, 2))
-        #testing 
-#         cv2.circle(src_img, (src_face_landmarks.part(points).x, src_face_landmarks.part(points).y), 2, 255, 1)
-#         cv2.putText(src_img, str(points), (src_face_landmarks.part(points).x + 4, src_face_landmarks.part(points).y), cv2.FONT_HERSHEY_SIMPLEX, 0.25, (255, 255, 255))
+        #testing to make sure that the model is correctly identifying points on the face
+        # cv2.circle(src_img, (src_face_landmarks.part(points).x, src_face_landmarks.part(points).y), 2, 255, 1)
+        # cv2.putText(src_img, str(points), (src_face_landmarks.part(points).x + 4, src_face_landmarks.part(points).y), cv2.FONT_HERSHEY_SIMPLEX, 0.25, (255, 255, 255))
 
+    #convert to numpy array, could change so that it is a 2D numpy array to begin with 
+    # src_face_landmark_points = np.array(src_face_landmark_points)
+    # src_face_landmark_points = np.reshape(src_face_landmark_points, (num_landmarks, 2))
+
+#testing to make sure that the model is correctly identifying points on the face
 # cv2.imshow("window", src_img)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
@@ -70,13 +72,14 @@ for face in dest_faces:
         dest_face_landmark_points.append(dest_face_landmarks.part(points).x)
         dest_face_landmark_points.append(dest_face_landmarks.part(points).y)
 
-    # dest_face_landmark_points = np.array(dest_face_landmark_points)
-    # dest_face_landmark_points = np.reshape(dest_face_landmark_points, (num_landmarks, 2))
-
-        # #testing 
+        #testing to make sure that the model is correctly identifying points on the face
         # cv2.circle(dest_img, (dest_face_landmarks.part(points).x, dest_face_landmarks.part(points).y), 2, 255, 1)
         # cv2.putText(dest_img, str(points), (dest_face_landmarks.part(points).x + 4, dest_face_landmarks.part(points).y), cv2.FONT_HERSHEY_SIMPLEX, 0.25, (255, 255, 255))
 
+    # dest_face_landmark_points = np.array(dest_face_landmark_points)
+    # dest_face_landmark_points = np.reshape(dest_face_landmark_points, (num_landmarks, 2))
+
+#testing to make sure that the model is correctly identifying points on the face
 # cv2.imshow("window", dest_img)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
