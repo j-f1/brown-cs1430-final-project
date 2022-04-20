@@ -86,8 +86,9 @@ for face in dest_faces:
 
 
 #Delaunay triangulation 
+#two options for this we can either use scipy.spatial.Delaunay or we can use cv2.SubDiv2D it seems like either should work
 
-
+ 
 
 
 
