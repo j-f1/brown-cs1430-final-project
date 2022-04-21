@@ -88,20 +88,26 @@ Before writing your progress report, you should have met with your TA and talked
 % Feel free to use the following questions as a guideline for writing this report:
 %
 % Restate the goal of the project succinctly.
-The goal of the project is to anonymize people's faces by replacing their face with one from a dataset of computer generated faces
+The goal of the project is to anonymize people's faces by replacing their face with one from a dataset of computer generated faces.
 % 
 % What has the team collectively accomplished?
+We have implemented a basic front end for our project, begun working on face swapping, and begun working on classifying gender based on an image of someone's face.
 %
 % What individual tasks have been accomplished?
-Claire: Implemented face detection using dlib, open-cv and a pretrained dlib model to detect the key points of the face
+Teammate C: Implemented face detection using dlib, open-cv and a pretrained dlib model to detect the key points of the face
+Teammate A: Added button for anonomyzing faces on front end and corresponding server route, adapted VVG code from Homework 5 to run on gender classification dataset
 % 
 % What are the current tasks?
-Claire: Implement face swapping 
+Team member C: Implement face swapping 
+Team member A: Training VVG model on gender classification
 %
 % What tasks remain undefined?
+We are unsure on how we will search for the best face to anonymize a chosen image with from all the randomly generated faces in our dataset. 
 %
 % What are the next steps?
+The next steps are to finish implementing face swapping. Once we do this, we are planning to integrate our existing VVG model to classify chosen images based on gender. We also need to find a way to search for the best randomly generated face based on skin tone, gender, and age. 
 %
 % Are you missing resources? Data, compute, skills?
+We are not missing any resources as of now. 
 
 \end{document}
