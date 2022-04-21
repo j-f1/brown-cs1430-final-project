@@ -3,12 +3,12 @@
 % CSCI 1430 Project Progress Report 1 Template
 %
 % This is a LaTeX document. LaTeX is a markup language for producing documents.
-% Your task is to answer the questions by filling out this document, then to 
-% compile this into a PDF document. 
-% You will then upload this PDF to `Gradescope' - the grading system that we will use. 
+% Your task is to answer the questions by filling out this document, then to
+% compile this into a PDF document.
+% You will then upload this PDF to `Gradescope' - the grading system that we will use.
 % Instructions for upload will follow soon.
 %
-% 
+%
 % TO COMPILE:
 % > pdflatex thisfile.tex
 %
@@ -25,7 +25,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % How to include two graphics on the same line:
-% 
+%
 % \includegraphics[width=0.49\linewidth]{yourgraphic1.png}
 % \includegraphics[width=0.49\linewidth]{yourgraphic2.png}
 %
@@ -34,7 +34,7 @@
 % \begin{equation}
 % y = mx+c
 % \end{equation}
-% 
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[11pt]{article}
@@ -87,21 +87,31 @@ Before writing your progress report, you should have met with your TA and talked
 
 % Feel free to use the following questions as a guideline for writing this report:
 %
-% Restate the goal of the project succinctly.
+\textit{Restate the goal of the project succinctly.}
 The goal of the project is to anonymize people's faces by replacing their face with one from a dataset of computer generated faces
-% 
-% What has the team collectively accomplished?
+
+\textit{What has the team collectively accomplished?}\\
+We've got a solid start on all the different parts of the project!
+
+\textit{What individual tasks have been accomplished?}\\
+Claire: Implemented face detection using dlib, open-cv and a pretrained dlib model to detect the key points of the face\\
+Jed: Basic frontend, initial communication with Pythoon
+
+\textit{What are the current tasks?}\\
+Claire: Implement face swapping\\
+Jed: Flesh out the frontend, allow selecting faces to swap
+
+\textit{What tasks remain undefined?}\\
+How exactly we'll do face matching\\
+Making this work in realtime (if it's fast enough)\\
+Temporal consistency?
+
+\textit{What are the next steps?}
+Integrate the face swapping with the frontend/UI\\
+Collect the dataset of faces to use as replacements
+
 %
-% What individual tasks have been accomplished?
-Claire: Implemented face detection using dlib, open-cv and a pretrained dlib model to detect the key points of the face
-% 
-% What are the current tasks?
-Claire: Implement face swapping 
-%
-% What tasks remain undefined?
-%
-% What are the next steps?
-%
-% Are you missing resources? Data, compute, skills?
+\textit{Are you missing resources? Data, compute, skills?}
+We've found some possible sources for images from movies, but it would be nice to have a more diverse collection of images that include people (but aren't cropped to just their faces). Especially people in large groups.
 
 \end{document}
