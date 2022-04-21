@@ -5,6 +5,7 @@
 *.synctex.gz
 *.log
 *.pyc
+.DS_Store
 
 venv
 .vscode
