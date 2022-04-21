@@ -79,39 +79,38 @@
 \textbf{Team name: Shallow Faces}\\
 \textbf{TA name: Henry Lucco}
 
-\emph{Note:} when submitting this document to Gradescope, make sure to add all other team members to the submission. This can be done on the submission page after uploading.
+% \emph{Note:} when submitting this document to Gradescope, make sure to add all other team members to the submission. This can be done on the submission page after uploading.
 
-\section*{Progress Report Instructions}
+% \section*{Progress Report Instructions}
 
-Before writing your progress report, you should have met with your TA and talked through your progress.
+% Before writing your progress report, you should have met with your TA and talked through your progress.
 
 % Feel free to use the following questions as a guideline for writing this report:
 %
-\textit{Restate the goal of the project succinctly.}
+\textit{Restate the goal of the project succinctly.}\\
 The goal of the project is to anonymize people's faces by replacing their face with one from a dataset of computer generated faces
 
 \textit{What has the team collectively accomplished?}\\
-We've got a solid start on all the different parts of the project!
+We have implemented a basic front end for our project, begun working on face swapping, and begun working on classifying gender based on an image of someone's face.
 
 \textit{What individual tasks have been accomplished?}\\
 C: Implemented face detection using dlib, open-cv and a pretrained dlib model to detect the key points of the face\\
-J: Basic frontend, initial communication with Pythoon
+J: Basic frontend, initial communication with Python\\
 A: Added button for anonomyzing faces on front end and corresponding server route, adapted VVG code from Homework 5 to run on gender classification dataset
 
 \textit{What are the current tasks?}\\
 C: Implement face swapping\\
-J: Flesh out the frontend, allow selecting faces to swap
+J: Flesh out the frontend, allow selecting faces to swap\\
 A: Training VVG model on gender classification
 
 \textit{What tasks remain undefined?}\\
-How exactly we'll do face matching\\
+How to search for best randomly generated face based on skin tone, gender, and age\\
 Making this work in realtime (if it's fast enough)\\
 Temporal consistency?
-How to search for best randomly generated face based on skin tone, gender, and age
 
 \textit{What are the next steps?}
-Integrate the face swapping with the frontend/UI\\
-Collect the dataset of faces to use as replacements
+The next steps are to finish implementing face swapping. Once we do this, we are planning to integrate our existing VVG model to classify chosen images based on gender. We also need to find a way to search for the best randomly generated face based on skin tone, gender, and age.
+We also need to integrate the face swapping code with the frontend/UI, and collect a dataset of faces to use as replacements.
 
 %
 \textit{Are you missing resources? Data, compute, skills?}\\
