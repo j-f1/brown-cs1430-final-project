@@ -3,6 +3,8 @@ import numpy as np
 from dlib import get_frontal_face_detector, shape_predictor
 import time
 
+TEETH_TRIANGLES = (111, 110)
+
 
 def extract_index_nparray(nparray):
     index = None
@@ -13,12 +15,14 @@ def extract_index_nparray(nparray):
 
 
 # this is the randomly generated face that will be placed on the head to anonomyize the image
-src_img_path = "jlo.png"
+# src_img_path = "jlo.png"
+src_img_path = "jennifer_aniston.png"
 src_img = cv2.imread(src_img_path, 1)
 bw_src_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
 
 # this is the image that the head will be placed on to
-dest_img_path = "jennifer_aniston.png"
+# dest_img_path = "jennifer_aniston.png"
+dest_img_path = "jlo.png"
 dest_img = cv2.imread(dest_img_path, 1)
 bw_dest_img = cv2.cvtColor(dest_img, cv2.COLOR_BGR2GRAY)
 
@@ -72,7 +76,6 @@ for face in faces:
     subdiv = cv2.Subdiv2D(rect)
     subdiv.insert(landmarks_points)
     triangles = np.array(subdiv.getTriangleList())
-    # triangles = np.array(triangles)
 
     indexes_triangles = []
     # edit this section
@@ -97,6 +100,7 @@ for face in faces:
 
 # Face 2
 faces2 = face_detector(bw_dest_img)
+face_tris = []
 for face in faces2:
     landmarks = face_landmarks_predictor(bw_dest_img, face)
     landmarks_points2 = []
@@ -107,6 +111,27 @@ for face in faces2:
 
     points2 = np.array(landmarks_points2, np.int32)
     convexhull2 = cv2.convexHull(points2)
+
+    # use Delaunay triangulation to get triangles in between each landmark point found
+    # two options for this we can either use scipy.spatial.Delaunay or we can use cv2.SubDiv2D it seems like either should work
+    rect2 = cv2.boundingRect(convexhull2)
+    subdiv2 = cv2.Subdiv2D(rect2)
+    subdiv2.insert(landmarks_points2)
+    triangles2 = np.array(subdiv2.getTriangleList())
+    # triangle = [x1 y1 x2 y2 x3 y3]
+    # area = 0.5*[x1(y2 - y3) + x2(y3 - y1) + x3(y1 - y2)]
+    areas = 0.5 * (
+        triangles2[:, 0] * (triangles2[:, 3] - triangles2[:, 5])
+        + triangles2[:, 2] * (triangles2[:, 5] - triangles2[:, 1])
+        + triangles2[:, 4] * (triangles2[:, 1] - triangles2[:, 3])
+    )
+    triangle_xs = triangles2[:, ::2]
+    triangle_ys = triangles2[:, 1::2]
+    triangle_centers = (np.mean([triangle_xs, triangle_ys], axis=-1)).T
+    face_tris.append(
+        (triangle_centers, np.stack([[triangle_xs], [triangle_ys]], axis=-1), areas)
+    )
+
 
 lines_space_mask = np.zeros_like(bw_src_img)
 lines_space_new_face = np.zeros_like(dest_img)
@@ -202,6 +227,21 @@ center_face2 = (int((x + x + w) / 2), int((y + y + h) / 2))
 seamlessclone = cv2.seamlessClone(
     result, dest_img, img2_head_mask, center_face2, cv2.NORMAL_CLONE
 )
+
+
+for triangle_centers, points, areas in face_tris:
+    cv2.polylines(seamlessclone, np.int32(points[0]), True, (255, 0, 0))
+    print(areas[np.array(TEETH_TRIANGLES)])
+    for i, center in enumerate(triangle_centers):
+        cv2.putText(
+            seamlessclone,
+            str(i),
+            np.int32(center),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.4,
+            (255, 255, 255),
+        )
+
 
 cv2.imshow("seamlessclone", seamlessclone)
 cv2.waitKey(0)
