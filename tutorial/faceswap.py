@@ -1,7 +1,7 @@
 import cv2
 # from dlib import get_frontal_face_detector, shape_predictor 
 import dlib
-from scipy.spatial import Delaunay
+# from scipy.spatial import Delaunay, ConvexHull
 import numpy as np
 
 #links to useful articles 
@@ -32,13 +32,13 @@ face_detector = dlib.get_frontal_face_detector()
 #downloaded the shape predictor 68 face landmark model which returns 68 key points in the face 
 #this model came from this link: https://github.com/davisking/dlib-models
 predictor_path = "shape_predictor_68_face_landmarks.dat"
-face_landmarks = dlib.shape_predictor(predictor_path)
+face_landmarks_predictor = dlib.shape_predictor(predictor_path)
 
 #loop through all the faces returned from the front face detector in both the src and dest images
 #could totally combine these two into a method and will do that later 
 src_faces = face_detector(bw_src_img)
 for face in src_faces:
-    src_face_landmarks = face_landmarks(bw_src_img, face)
+    src_face_landmarks = face_landmarks_predictor(bw_src_img, face)
     num_landmarks = src_face_landmarks.num_parts
     # src_face_landmark_points = np.empty((num_landmarks, 0))
     src_face_landmark_points = []
@@ -49,22 +49,22 @@ for face in src_faces:
         src_face_landmark_points.append(src_face_landmarks.part(points).y)
     
         #testing to make sure that the model is correctly identifying points on the face
-        # cv2.circle(src_img, (src_face_landmarks.part(points).x, src_face_landmarks.part(points).y), 2, 255, 1)
-        # cv2.putText(src_img, str(points), (src_face_landmarks.part(points).x + 4, src_face_landmarks.part(points).y), cv2.FONT_HERSHEY_SIMPLEX, 0.25, (255, 255, 255))
+        cv2.circle(src_img, (src_face_landmarks.part(points).x, src_face_landmarks.part(points).y), 2, 255, 1)
+        cv2.putText(src_img, str(points), (src_face_landmarks.part(points).x + 4, src_face_landmarks.part(points).y), cv2.FONT_HERSHEY_SIMPLEX, 0.25, (255, 255, 255))
 
     #convert to numpy array, could change so that it is a 2D numpy array to begin with 
-    # src_face_landmark_points = np.array(src_face_landmark_points)
-    # src_face_landmark_points = np.reshape(src_face_landmark_points, (num_landmarks, 2))
+    src_face_landmark_points = np.array(src_face_landmark_points)
+    src_face_landmark_points = np.reshape(src_face_landmark_points, (num_landmarks, 2))
 
-#testing to make sure that the model is correctly identifying points on the face
-# cv2.imshow("window", src_img)
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
+# testing to make sure that the model is correctly identifying points on the face
+cv2.imshow("window", src_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
   
 
 dest_faces = face_detector(bw_dest_img)
 for face in dest_faces:
-    dest_face_landmarks = face_landmarks(bw_dest_img, face)
+    dest_face_landmarks = face_landmarks_predictor(bw_dest_img, face)
     num_landmarks = dest_face_landmarks.num_parts
     dest_face_landmark_points = []
 
@@ -87,8 +87,11 @@ for face in dest_faces:
 
 #Delaunay triangulation 
 #two options for this we can either use scipy.spatial.Delaunay or we can use cv2.SubDiv2D it seems like either should work
+#we want to get the triangles from each point
 
- 
+srcConvexHull = cv2.convexHull(np.array(src_face_landmark_points, np.int32))
+srcSubDivison = cv2.SubDiv2(cv2.boundingRect(srcConvexHull))
+srcSubDivison.insert(src_face_landmark_points)
+srcTriangles = srcSubDivison.getTriangleList()
 
-
-
+print(srcTriangles)
