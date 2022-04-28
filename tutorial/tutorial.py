@@ -13,36 +13,19 @@ def extract_index_nparray(nparray):
         break
     return index
 
-<<<<<<< HEAD
-#this is the randomly generated face that will be placed on the head to anonomyize the image
-src_img_path =   "emily.jpg"
-src_img = cv2.imread(src_img_path, 1)
-bw_src_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
-
-#this is the image that the head will be placed on to 
-dest_img_path =  "jlo.png" 
-=======
 
 # this is the randomly generated face that will be placed on the head to anonomyize the image
-# src_img_path = "jlo.png"
-src_img_path = "jennifer_aniston.png"
+src_img_path = "emily.jpg"
 src_img = cv2.imread(src_img_path, 1)
 bw_src_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
 
 # this is the image that the head will be placed on to
-# dest_img_path = "jennifer_aniston.png"
 dest_img_path = "jlo.png"
->>>>>>> c880b921f3aa7cd5c56cb48d1e604b6cf3126a25
 dest_img = cv2.imread(dest_img_path, 1)
 bw_dest_img = cv2.cvtColor(dest_img, cv2.COLOR_BGR2GRAY)
 
 mask = np.zeros_like(bw_src_img)
 
-<<<<<<< HEAD
-#use python dlib to get the face
-#get frontal_face_detector uses a HOG + Linear SVM face detection method which is faster than the CNN alternative
-#an alternative option would be to use a CNN face detector which I believe is able to better identify faces in different angles, lightings, etc 
-=======
 # print(mask.shape)
 print(bw_src_img.shape)
 # mask = np.zeros(bw_src_img.shape)
@@ -50,7 +33,6 @@ print(bw_src_img.shape)
 # use python dlib to get the face
 # get frontal_face_detector uses a HOG + Linear SVM face detection method which is faster than the CNN alternative
 # an alternative option would be to use a CNN face detector which I believe is able to better identify faces in different angles, lightings, etc
->>>>>>> c880b921f3aa7cd5c56cb48d1e604b6cf3126a25
 face_detector = get_frontal_face_detector()
 
 # can use any shape predictor or could also train our own
@@ -211,16 +193,6 @@ for triangle_index in indexes_triangles:
     )
 
     # Reconstructing destination face
-<<<<<<< HEAD
-    img2_new_face_rect_area = new_face[y: y + h, x: x + w]
-    img2_new_face_rect_area_gray = cv2.cvtColor(img2_new_face_rect_area, cv2.COLOR_BGR2GRAY)
-    _, mask_triangles_designed = cv2.threshold(img2_new_face_rect_area_gray, 1, 255, cv2.THRESH_BINARY_INV)
-    warped_triangle = cv2.bitwise_and(warped_triangle, warped_triangle, mask=mask_triangles_designed)
-
-    img2_new_face_rect_area = cv2.add(img2_new_face_rect_area, warped_triangle)
-    new_face[y: y + h, x: x + w] = img2_new_face_rect_area
-
-=======
     img2_new_face_rect_area = img2_new_face[y : y + h, x : x + w]
     img2_new_face_rect_area_gray = cv2.cvtColor(
         img2_new_face_rect_area, cv2.COLOR_BGR2GRAY
@@ -234,7 +206,6 @@ for triangle_index in indexes_triangles:
 
     img2_new_face_rect_area = cv2.add(img2_new_face_rect_area, warped_triangle)
     img2_new_face[y : y + h, x : x + w] = img2_new_face_rect_area
->>>>>>> c880b921f3aa7cd5c56cb48d1e604b6cf3126a25
 
 
 # Face swapped (putting 1st face into 2nd face)
