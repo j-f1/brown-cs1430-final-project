@@ -3,6 +3,9 @@
 1. In one terminal, run `flask run` in the `server/` folder
 2. In another terminal, run `npm install` and then `npm start` in the `frontend/` folder
 
+## How to run tutorial at the moment
+pip install -r requirements.txt
+
 ## Resources
 
 - https://pysource.com/2019/05/28/face-swapping-explained-in-8-steps-opencv-with-python/

@@ -12,20 +12,16 @@ def extract_index_nparray(nparray):
     return index
 
 #this is the randomly generated face that will be placed on the head to anonomyize the image
-src_img_path = "jlo.png" 
+src_img_path =   "emily.jpg"
 src_img = cv2.imread(src_img_path, 1)
 bw_src_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
 
 #this is the image that the head will be placed on to 
-dest_img_path = "jennifer_aniston.png"
+dest_img_path =  "jlo.png" 
 dest_img = cv2.imread(dest_img_path, 1)
 bw_dest_img = cv2.cvtColor(dest_img, cv2.COLOR_BGR2GRAY)
 
 mask = np.zeros_like(bw_src_img)
-
-# print(mask.shape)
-print(bw_src_img.shape)
-# mask = np.zeros(bw_src_img.shape)
 
 #use python dlib to get the face
 #get frontal_face_detector uses a HOG + Linear SVM face detection method which is faster than the CNN alternative
@@ -38,11 +34,7 @@ face_detector = get_frontal_face_detector()
 shape_predictor_path = "shape_predictor_68_face_landmarks.dat"
 face_landmarks_predictor = shape_predictor(shape_predictor_path)
 
-
-#check this later 
-height, width, channels = dest_img.shape
-img2_new_face = np.zeros((height, width, channels), np.uint8)
-
+new_face = np.zeros((dest_img.shape), np.uint8)
 
 #source face 
 faces = face_detector(bw_src_img)
@@ -164,13 +156,13 @@ for triangle_index in indexes_triangles:
     warped_triangle = cv2.bitwise_and(warped_triangle, warped_triangle, mask=cropped_tr2_mask)
 
     # Reconstructing destination face
-    img2_new_face_rect_area = img2_new_face[y: y + h, x: x + w]
+    img2_new_face_rect_area = new_face[y: y + h, x: x + w]
     img2_new_face_rect_area_gray = cv2.cvtColor(img2_new_face_rect_area, cv2.COLOR_BGR2GRAY)
     _, mask_triangles_designed = cv2.threshold(img2_new_face_rect_area_gray, 1, 255, cv2.THRESH_BINARY_INV)
     warped_triangle = cv2.bitwise_and(warped_triangle, warped_triangle, mask=mask_triangles_designed)
 
     img2_new_face_rect_area = cv2.add(img2_new_face_rect_area, warped_triangle)
-    img2_new_face[y: y + h, x: x + w] = img2_new_face_rect_area
+    new_face[y: y + h, x: x + w] = img2_new_face_rect_area
 
 
 
@@ -179,9 +171,8 @@ img2_face_mask = np.zeros_like(bw_dest_img)
 img2_head_mask = cv2.fillConvexPoly(img2_face_mask, convexhull2, 255)
 img2_face_mask = cv2.bitwise_not(img2_head_mask)
 
-
 img2_head_noface = cv2.bitwise_and(dest_img, dest_img, mask=img2_face_mask)
-result = cv2.add(img2_head_noface, img2_new_face)
+result = cv2.add(img2_head_noface, new_face)
 
 (x, y, w, h) = cv2.boundingRect(convexhull2)
 center_face2 = (int((x + x + w) / 2), int((y + y + h) / 2))
