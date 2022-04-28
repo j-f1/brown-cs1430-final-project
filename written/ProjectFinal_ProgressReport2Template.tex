@@ -76,8 +76,8 @@
 
 \emph{Please make this document anonymous.}
 
-\textbf{Team name: \emph{HERE PLEASE}}\\
-\textbf{TA name: \emph{HERE PLEASE}}
+\textbf{Team name: Shallow Faces}\\
+\textbf{TA name: Henry Lucco}
 
 \emph{Note:} when submitting this document to Gradescope, make sure to add all other team members to the submission. This can be done on the submission page after uploading.
 
@@ -87,17 +87,21 @@ Before writing your progress report, you should have met with your TA and talked
 
 % Feel free to use the following questions as a guideline for writing this report:
 %
-% Restate the goal of the project succinctly.
+% Restate the goal of the project succinctly.\\
+The goal of the project is to anonymize people's faces by replacing their face with one from a dataset of computer generated faces.
 % 
 % What has the team collectively accomplished?
 %
-% What individual tasks have been accomplished?
+% What individual tasks have been accomplished?\\
+A: Trained VVG model on gender classification dataset to achieve 94% accuracy, checked results with Tensorboard.
 % 
-% What are the current tasks?
+% What are the current tasks?\\
+A: Running the randomly generated faces dataset through the VVG model and storing classifications in a JSON file.  
 %
 % What tasks remain undefined?
 %
-% What are the next steps?
+% What are the next steps?\\
+One next step is to finish running the dataset of randomly generated faces through the trained VVG model to classify each face by gender and store this information in a JSON file. We will also store information about whether a face is smiling with teeth or not in this JSON file. This will allow us to eventually choose the best randomly generated face to anonymize someone's face. 
 %
 % Are you missing resources? Data, compute, skills?
 
