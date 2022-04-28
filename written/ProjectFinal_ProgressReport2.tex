@@ -3,12 +3,12 @@
 % CSCI 1430 Project Progress Report 2 Template
 %
 % This is a LaTeX document. LaTeX is a markup language for producing documents.
-% Your task is to answer the questions by filling out this document, then to 
-% compile this into a PDF document. 
-% You will then upload this PDF to `Gradescope' - the grading system that we will use. 
+% Your task is to answer the questions by filling out this document, then to
+% compile this into a PDF document.
+% You will then upload this PDF to `Gradescope' - the grading system that we will use.
 % Instructions for upload will follow soon.
 %
-% 
+%
 % TO COMPILE:
 % > pdflatex thisfile.tex
 %
@@ -25,7 +25,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % How to include two graphics on the same line:
-% 
+%
 % \includegraphics[width=0.49\linewidth]{yourgraphic1.png}
 % \includegraphics[width=0.49\linewidth]{yourgraphic2.png}
 %
@@ -34,7 +34,7 @@
 % \begin{equation}
 % y = mx+c
 % \end{equation}
-% 
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[11pt]{article}
@@ -87,23 +87,27 @@ Before writing your progress report, you should have met with your TA and talked
 
 % Feel free to use the following questions as a guideline for writing this report:
 %
-% Restate the goal of the project succinctly.\\
+\textit{Restate the goal of the project succinctly.}\\
 The goal of the project is to anonymize people's faces by replacing their face with one from a dataset of computer generated faces.
-% 
+%
 % What has the team collectively accomplished?
 %
-% What individual tasks have been accomplished?\\
-A: Trained VVG model on gender classification dataset to achieve 94% accuracy, checked results with Tensorboard.
-C: Finished faceswap step that takes the face of one person and places it on the head of another 
-% 
-% What are the current tasks?\\
-A: Running the randomly generated faces dataset through the VVG model and storing classifications in a JSON file.  
-C: Finish cleaning up the code for the faceswap, work on finding a new model to more accurately detect angles and skin tones. 
+\textit{What individual tasks have been accomplished?}\\
+A: Trained VVG model on gender classification dataset to achieve 94\% accuracy, checked results with Tensorboard.\\
+C: Finished faceswap step that takes the face of one person and places it on the head of another\\
+J: Started work on algorithm to identify whether a face is showing teeth or not.
+
+%
+\textit{What are the current tasks?}\\
+A: Running the randomly generated faces dataset through the VVG model and storing classifications in a JSON file.\\
+C: Finish cleaning up the code for the faceswap, work on finding a new model to more accurately detect angles and skin tones.\\
+J: Finish teeth detection, hook the face swapping code up to the frontend.
+
 %
 % What tasks remain undefined?
 %
-% What are the next steps?\\
-One next step is to finish running the dataset of randomly generated faces through the trained VVG model to classify each face by gender and store this information in a JSON file. We will also store information about whether a face is smiling with teeth or not in this JSON file. This will allow us to eventually choose the best randomly generated face to anonymize someone's face. 
+\textit{What are the next steps?}\\
+One next step is to finish running the dataset of randomly generated faces through the trained VVG model to classify each face by gender and store this information in a JSON file. We will also store information about whether a face is smiling with teeth or not in this JSON file. This will allow us to eventually choose the best randomly generated face to anonymize someone's face.
 %
 % Are you missing resources? Data, compute, skills?
 
