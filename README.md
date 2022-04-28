@@ -18,7 +18,7 @@ pip install -r requirements.txt
 - https://www.kaggle.com/datasets/xuejunz/film-posters-information
 - https://www.kaggle.com/datasets/spiyer/old-film-restoration-dataset
 - https://www.kaggle.com/datasets/cashutosh/gender-classification-dataset/code (could be used for training a model for gender classification)
-- https://www.kaggle.com/gpiosenka/gender-classification-from-an-image (smaller gender data set)
+- https://www.kaggle.com/gpiosenka/gender-classification-from-an-image (smaller gender data set, in repo currently)
 
 
 ## Meetings w/ Ta
