@@ -52,9 +52,9 @@ class Datasets():
 
         # Get list of all images in training directory
         file_list = []
-        for root, _, files in os.walk(self.data_path):
+        for root, _, files in os.walk(os.path.join(self.data_path, "train/")):
             for name in files:
-                if name.endswith(".png"):
+                if name.endswith(".jpg"):
                     file_list.append(os.path.join(root, name))
 
         # Shuffle filepaths
@@ -62,6 +62,8 @@ class Datasets():
 
         # Take sample of file paths
         file_list = file_list[:hp.preprocess_sample_size]
+        
+        print("FILE LIST LENGTH", len(file_list))
 
         # Allocate space in memory for images
         data_sample = np.zeros(
