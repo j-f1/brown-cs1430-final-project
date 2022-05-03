@@ -22,8 +22,10 @@ def main():
     "checkpoints/your_model/042822-220607/your.weights.e012-acc0.9350.h5")
     
     #creating data processor
-    data_processor = Datasets("../ai_faces", "1")
-    test_data = data_processor.get_data("../ai_faces", False, False, False)
+    data_path = '..'+os.sep+'ai_faces'+os.sep
+    data_processor = Datasets(data_path, "1")
+    test_data = data_processor.get_data(data_path, False, False, False)
+    print("Test data length", test_data.__len__())
     predictions = model.predict(test_data)
     
 main()
