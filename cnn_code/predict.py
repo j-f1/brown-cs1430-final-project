@@ -1,7 +1,9 @@
 import os
+from isort import file
 import tensorflow as tf
 from PIL import Image
 import numpy as np
+import json
 
 import hyperparameters as hp
 from models import YourModel
@@ -15,19 +17,33 @@ def predict():
     
     #Assign data path
     data_path = '..'+os.sep+'ai_faces' 
-    standardized_data = standardize(data_path)
+    standardized_data, file_paths = standardize(data_path)
     
     print("Standardized data shape", standardized_data.shape)
     
     predictions = model.predict(standardized_data, verbose=1)
     
     print("Predictions shape", predictions.shape)
-    print("Predictions", predictions)
     
     gender = np.argmax(predictions, axis=1)
     print("Gender shape", gender.shape)
-    print("Gender", gender)
     
+    dictionary = {}
+    
+    for i in range(len(file_paths)):
+        numeric_filter = filter(str.isdigit, file_paths[i])
+        file_name = "".join(numeric_filter)
+        if gender[i] == 0:
+            dictionary[file_name] = "female"
+        else:
+            dictionary[file_name] = "male"
+        
+    # the json file where the output must be stored 
+    out_file = open("../image_data.json", "w") 
+        
+    json.dump(dictionary, out_file, indent = 4) 
+        
+    out_file.close()
     
 def standardize(data_path):   
     """ Calculate mean and standard deviation of the images 
@@ -40,7 +56,7 @@ def standardize(data_path):
     # Get list of all images in training directory
     file_list = []
     for root, _, files in os.walk(data_path):
-        for name in files:
+        for name in sorted(files):
             file_list.append(os.path.join(root, name))
                 
     num_files = len(file_list)
@@ -90,7 +106,7 @@ def standardize(data_path):
         img = (img - mean) / std
         data_sample[i] = img
     
-    return data_sample
+    return data_sample, file_list
     
     
 predict()
