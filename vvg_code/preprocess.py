@@ -36,10 +36,10 @@ class Datasets():
         self.calc_mean_and_std()
 
         # Setup data generators
-        # self.train_data = self.get_data(
-        #     os.path.join(self.data_path, "train/"), task == '3', True, True)
-        # self.test_data = self.get_data(
-        #     os.path.join(self.data_path, "test/"), task == '3', False, False)
+        self.train_data = self.get_data(
+            os.path.join(self.data_path, "train/"), task == '3', True, True)
+        self.test_data = self.get_data(
+            os.path.join(self.data_path, "test/"), task == '3', False, False)
 
     def calc_mean_and_std(self):
         """ Calculate mean and standard deviation of a sample of the
@@ -52,9 +52,9 @@ class Datasets():
 
         # Get list of all images in training directory
         file_list = []
-        for root, _, files in os.walk(os.path.join(self.data_path, "train/")):
+        for root, _, files in os.walk(self.data_path):
             for name in files:
-                if name.endswith(".jpg"):
+                if name.endswith(".png"):
                     file_list.append(os.path.join(root, name))
 
         # Shuffle filepaths
@@ -84,19 +84,6 @@ class Datasets():
         #       of the images in data_sample and store them in
         #       self.mean and self.std respectively.
         # ==========================================================
-        
-        # num_images = len(data_sample)
-        # pixel_sum = np.zeros((hp.img_size, hp.img_size, 3))
-        
-        # for j in range(num_images):
-        #     pixel_sum = pixel_sum + data_sample[i]
-            
-            
-        # print("PIXEL SUM", pixel_sum[:,:,0])
-        # print("PIXLE SUM channel 1,", pixel_sum[:,:,1])
-        # print("NUM IMAGES", num_images)
-        # self.mean = pixel_sum / num_images
-        # self.std = np.std(self.mean)
         
         self.mean = np.mean(data_sample, axis=0)
         self.std = np.std(data_sample, axis=0)

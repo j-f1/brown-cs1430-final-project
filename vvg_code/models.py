@@ -88,7 +88,7 @@ class YourModel(tf.keras.Model):
             Dropout(rate=0.3),
             Flatten(),
             Dense(units=128, activation="relu"),
-            Dense(units=64, activation="softmax"),
+            Dense(units=2, activation="softmax"),
         ]
 
     def call(self, x):
