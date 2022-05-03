@@ -5,14 +5,13 @@ import numpy as np
 
 import hyperparameters as hp
 from models import YourModel
-from preprocess import Datasets
 
 def predict():
     #Creating model
     model = YourModel()
     model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
     model.load_weights(
-    "checkpoints/your_model/042822-220607/your.weights.e012-acc0.9350.h5")
+    "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5")
     
     #Assign data path
     data_path = '..'+os.sep+'ai_faces' 
@@ -24,6 +23,11 @@ def predict():
     
     print("Predictions shape", predictions.shape)
     print("Predictions", predictions)
+    
+    gender = np.argmax(predictions, axis=1)
+    print("Gender shape", gender.shape)
+    print("Gender", gender)
+    
     
 def standardize(data_path):   
     """ Calculate mean and standard deviation of the images 
@@ -83,7 +87,6 @@ def standardize(data_path):
     
     for i in range(num_files):
         img = data_sample[i]
-        img = img / 255.
         img = (img - mean) / std
         data_sample[i] = img
     
