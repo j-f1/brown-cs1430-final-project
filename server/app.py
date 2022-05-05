@@ -68,9 +68,9 @@ def swap_faces():
         return _build_cors_preflight_response()
 
     image = request.files["image"]
-    data = image.read()
-    image = np.array(Image.fromarray(data))
-    # gender = predict_image(image)
+    # data = image.read()
+    # img = np.array(Image.open(image).convert("RGB"))
+    # gender = predict_image(img)
     # print("gender", gender)
 
     response = make_response()
