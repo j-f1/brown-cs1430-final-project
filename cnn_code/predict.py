@@ -1,5 +1,4 @@
 import os
-from isort import file
 import tensorflow as tf
 from PIL import Image
 import numpy as np
@@ -7,6 +6,8 @@ import json
 
 import hyperparameters as hp
 from models import YourModel
+
+from teeth import are_there_teeth
 
 
 def predict():
@@ -19,7 +20,7 @@ def predict():
 
     # Assign data path
     data_path = ".." + os.sep + "ai_faces"
-    standardized_data, file_paths = standardize(data_path)
+    original_images, standardized_data, file_paths = standardize(data_path)
 
     print("Standardized data shape", standardized_data.shape)
 
@@ -35,12 +36,17 @@ def predict():
     for i in range(len(file_paths)):
         numeric_filter = filter(str.isdigit, file_paths[i])
         file_name = "".join(numeric_filter)
+        dictionary[file_name] = {}
+        dictionary[file_name]["teeth"] = are_there_teeth(
+            (original_images[i] * 255).astype(np.uint8), annotate=False
+        )
         if gender[i] == 0:
-            dictionary[file_name] = "female"
+            dictionary[file_name]["gender"] = "female"
         else:
-            dictionary[file_name] = "male"
+            dictionary[file_name]["gender"] = "male"
 
-    # the json file where the output must be stored
+    # the json
+    #  where the output must be stored
     out_file = open("../image_data.json", "w")
 
     json.dump(dictionary, out_file, indent=4)
@@ -70,6 +76,8 @@ def standardize(data_path):
 
     # Import images
     for i, file_path in enumerate(file_list):
+        if i % 10 == 0:
+            print(f"\rReading {i:04}", end="")
         img = Image.open(file_path)
         img = img.resize((hp.img_size, hp.img_size))
         img = np.array(img, dtype=np.float32)
@@ -115,12 +123,14 @@ def standardize(data_path):
         )
     )
 
+    original = np.array(data_sample)
+
     for i in range(num_files):
         img = data_sample[i]
         img = (img - mean) / std
         data_sample[i] = img
 
-    return data_sample, file_list
+    return original, data_sample, file_list
 
 
 predict()

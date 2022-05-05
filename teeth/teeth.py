@@ -17,18 +17,19 @@ def dlib_point_to_tuple(pt):
     return (pt.x, pt.y)
 
 
-shape_predictor_path = "../tutorial/shape_predictor_68_face_landmarks.dat"
+shape_predictor_path = "../faceswap/shape_predictor_68_face_landmarks.dat"
 face_landmarks_predictor = shape_predictor(shape_predictor_path)
+face_detector = get_frontal_face_detector()
 
 
 def are_there_teeth(img, annotate):
     bw_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_detector(bw_img)
-    if annotate:
-        if len(faces) == 0:
+    if len(faces) == 0:
+        if annotate:
             return img, "unknown"
-    else:
-        return "unknown"
+        else:
+            return "unknown"
 
     face = faces[0]
     mask = np.zeros_like(bw_img)
@@ -72,10 +73,10 @@ def are_there_teeth(img, annotate):
 
 if __name__ == "__main__":
     vid = cv2.VideoCapture(0)
-    face_detector = get_frontal_face_detector()
 
     while True:
         ok, img = vid.read()
+        print(np.max(img))
         if not ok:
             break
 
