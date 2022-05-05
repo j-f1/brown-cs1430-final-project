@@ -3,8 +3,8 @@ from flask import Flask, request, make_response
 import json
 import base64
 
-#from faceswap import swap_face
-from teeth import are_there_teeth
+# from faceswap import swap_face
+from teeth import are_there_teeth, CUTOFF
 from cnn_code.predict import predict_image
 from PIL import Image
 import cv2
@@ -66,7 +66,7 @@ def select_image():
 def swap_faces():
     if request.method == "OPTIONS":
         return _build_cors_preflight_response()
-    
+
     image = request.files["image"]
     data = image.read()
     image = np.array(Image.fromarray(data))
