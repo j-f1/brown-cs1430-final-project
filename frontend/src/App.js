@@ -21,6 +21,7 @@ function App() {
     })
       .then((res) => res.json())
       .then(({ image, faces }) => {
+        console.log(faces);
         setImage(image);
         setFaceRects(faces);
       });
@@ -39,9 +40,9 @@ function App() {
   }, []);
 
   const clear = (e) => {
-    e.preventDefault()
-    setFaceRects(null)
-    setImage(null)
+    e.preventDefault();
+    setFaceRects(null);
+    setImage(null);
   };
 
   return (
@@ -66,7 +67,7 @@ function App() {
                     left: faceRect.x * 100 + "%",
                     width: faceRect.width * 100 + "%",
                     height: faceRect.height * 100 + "%",
-                    border: "1px solid red",
+                    border: "1px solid " + (faceRect.teeth ? "green" : "red"),
                     cursor: "pointer",
                   }}
                   onClick={(e) => {

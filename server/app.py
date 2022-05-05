@@ -3,7 +3,7 @@ import json
 import base64
 
 # from faceswap import swap_face
-from teeth import are_there_teeth
+from teeth import are_there_teeth, CUTOFF
 from PIL import Image
 import cv2
 import numpy as np
@@ -11,12 +11,14 @@ import numpy as np
 app = Flask(__name__)
 
 
-def dlib_rect_to_dict(rect, size):
+def dlib_rect_to_dict(rect, size, teeth):
     return {
         "x": rect.left() / size[1],
         "y": rect.top() / size[0],
         "width": rect.width() / size[1],
         "height": rect.height() / size[0],
+        "teeth_heuristic": float(teeth),
+        "teeth": bool(teeth > CUTOFF),
     }
 
 
@@ -42,15 +44,16 @@ def select_image():
     data = image.read()
     img = np.array(Image.open(image).convert("RGB"))
     # face-detect
-    faces, heuristic = are_there_teeth(img, annotate=False)
-    print(faces, heuristic)
+    faces, heuristics = are_there_teeth(img, annotate=False)
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
     json.dump(
         {
             "image": str(base64.encodebytes(data), encoding="ascii"),
-            "faces": [dlib_rect_to_dict(rect, img.shape) for rect in faces],
-            "teeth": heuristic,
+            "faces": [
+                dlib_rect_to_dict(rect, img.shape, teeth)
+                for rect, teeth in zip(faces, heuristics)
+            ],
         },
         response.stream,
     )

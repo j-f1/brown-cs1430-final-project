@@ -5,7 +5,7 @@ import numpy as np
 from dlib import get_frontal_face_detector, shape_predictor
 import time
 
-CUTOFF = 1
+CUTOFF = 0.8
 
 # clrs.cc
 GREEN = (46, 204, 64)
@@ -29,46 +29,52 @@ def are_there_teeth(img, annotate):
         if annotate:
             return img, "unknown"
         else:
-            return [], "unknown"
+            return [], []
 
-    face = faces[0]
-    mask = np.zeros_like(bw_img)
-    if annotate:
-        out_img = np.array(img)
-        cv2.rectangle(
-            out_img,
-            dlib_point_to_tuple(face.tl_corner()),
-            dlib_point_to_tuple(face.br_corner()),
-            GREEN,
+    heuristics = []
+    for face in faces:
+        mask = np.zeros_like(bw_img)
+        if annotate:
+            out_img = np.array(img)
+            cv2.rectangle(
+                out_img,
+                dlib_point_to_tuple(face.tl_corner()),
+                dlib_point_to_tuple(face.br_corner()),
+                GREEN,
+            )
+        landmarks = face_landmarks_predictor(bw_img, face)
+
+        landmark_verts = np.array(
+            [
+                dlib_point_to_tuple(landmarks.part(i))
+                for i in range(landmarks.num_parts)
+            ],
+            dtype=np.int32,
         )
-    landmarks = face_landmarks_predictor(bw_img, face)
 
-    landmark_verts = np.array(
-        [dlib_point_to_tuple(landmarks.part(i)) for i in range(landmarks.num_parts)],
-        dtype=np.int32,
-    )
+        if annotate:
+            for vert in landmark_verts:
+                cv2.circle(out_img, vert, 2, BLUE)
 
-    if annotate:
-        for vert in landmark_verts:
-            cv2.circle(out_img, vert, 2, BLUE)
+        convexhull = cv2.convexHull(landmark_verts)
+        cv2.fillConvexPoly(mask, convexhull, 255)
+        rect = cv2.boundingRect(convexhull)
+        subdiv = cv2.Subdiv2D(rect)
+        subdiv.insert(landmark_verts.astype(float))
+        triangles = np.array(subdiv.getTriangleList())
+        areas = 0.5 * (
+            triangles[:, 0] * (triangles[:, 3] - triangles[:, 5])
+            + triangles[:, 2] * (triangles[:, 5] - triangles[:, 1])
+            + triangles[:, 4] * (triangles[:, 1] - triangles[:, 3])
+        )
 
-    convexhull = cv2.convexHull(landmark_verts)
-    cv2.fillConvexPoly(mask, convexhull, 255)
-    rect = cv2.boundingRect(convexhull)
-    subdiv = cv2.Subdiv2D(rect)
-    subdiv.insert(landmark_verts.astype(float))
-    triangles = np.array(subdiv.getTriangleList())
-    areas = 0.5 * (
-        triangles[:, 0] * (triangles[:, 3] - triangles[:, 5])
-        + triangles[:, 2] * (triangles[:, 5] - triangles[:, 1])
-        + triangles[:, 4] * (triangles[:, 1] - triangles[:, 3])
-    )
+        heuristic = areas[np.array(-2)] / face.area() * 1e3
+        heuristics.append(heuristic)
 
-    heuristic = areas[np.array(-2)] / face.area() * 1e3
+        if annotate:
+            return out_img, (":D" if heuristic > CUTOFF else ":|")
 
-    if annotate:
-        return out_img, (":D" if heuristic > CUTOFF else ":|")
-    return faces, heuristic
+    return faces, heuristics
 
 
 if __name__ == "__main__":
