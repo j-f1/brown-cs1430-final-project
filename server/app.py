@@ -2,6 +2,12 @@ from flask import Flask, request, make_response
 import json
 import base64
 
+from faceswap import swap_face
+from teeth import are_there_teeth
+from PIL import Image
+import cv2
+import numpy as np
+
 app = Flask(__name__)
 
 
@@ -25,8 +31,10 @@ def select_image():
 
     image = request.files["image"]
     data = image.read()
-    # TODO: read into numpy array
-    # TODO: face-detect
+    image = cv2.cvtColor(
+        np.array(Image.open(request.files["image"])), cv2.COLOR_BGR2GRAY
+    )
+    # face-detect
     faces = [{"x": 0.1, "y": 0.2, "width": 0.05, "height": 0.1}]
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
