@@ -69,14 +69,13 @@ def swap_faces():
 
     data = base64.b64decode(bytes(request.form["image"], encoding="ascii"))
     img = np.array(Image.open(BytesIO(data)).convert("RGB"))
-    # gender = predict_image(image)
-    # print("gender", gender)
+    gender = predict_image(img)
 
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
     json.dump(
         {
-            "image": "Working",
+            "image": gender,
         },
         response.stream,
     )
