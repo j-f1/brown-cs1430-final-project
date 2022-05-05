@@ -1,14 +1,18 @@
 from flask import Flask, request, make_response
 import json
 import base64
+import os
+import dlib
 
-# from faceswap import swap_face
+import faceswap
 from teeth import are_there_teeth, CUTOFF
 from cnn_code.predict import predict_image
 from PIL import Image
 import cv2
 import numpy as np
 from io import BytesIO
+
+from claire import select_face
 
 app = Flask(__name__)
 
@@ -46,7 +50,7 @@ def select_image():
     data = image.read()
     img = np.array(Image.open(image).convert("RGB"))
     gender = predict_image(img)
-    
+
     # face-detect
     faces, heuristics = are_there_teeth(img, annotate=False)
     response = make_response()
@@ -58,7 +62,7 @@ def select_image():
                 dlib_rect_to_dict(rect, img.shape, teeth)
                 for rect, teeth in zip(faces, heuristics)
             ],
-            "gender": gender
+            "gender": gender,
         },
         response.stream,
     )
@@ -69,7 +73,7 @@ def select_image():
 def swap_faces():
     if request.method == "OPTIONS":
         return _build_cors_preflight_response()
-    
+
     data = base64.b64decode(bytes(request.form["image"], encoding="ascii"))
     img = np.array(Image.open(BytesIO(data)).convert("RGB"))
 
@@ -82,3 +86,26 @@ def swap_faces():
         response.stream,
     )
     return response
+
+    face_id = select_face(gender=request.form["gender"], teeth=request.form["teeth"])
+
+    result = faceswap.swap_faces(
+        os.path.join(os.path.dirname(__file__), "../ai_faces/" + face_id + ".png"),
+        img,
+        dlib.rectangle(
+            float(request.form["x"]),
+            float(request.form["y"]),
+            float(request.form["width"]) + float(request.form["x"]),
+            float(request.form["height"]) + float(request.form["y"]),
+        ),
+    )
+
+    json.dump(
+        {
+            "image": str(
+                base64.encodebytes(cv2.imencode(".png", result)),
+                encoding="ascii",
+            ),
+        },
+        response.stream,
+    )

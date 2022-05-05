@@ -10,6 +10,7 @@ const SERVER = "http://localhost.proxyman.io:5000";
 
 function App() {
   const [image, setImage] = useState(null);
+  const [result, setResult] = useState(null);
   const [faceRects, setFaceRects] = useState(null);
   /** @type {React.MutableRefObject<HTMLFormElement>} */
   const formRef = useRef();
@@ -32,13 +33,19 @@ function App() {
       e.preventDefault();
       const data = new FormData();
       data.set("image", image);
+      data.set("x", faceRects[0].x);
+      data.set("y", faceRects[0].y);
+      data.set("width", faceRects[0].width);
+      data.set("height", faceRects[0].height);
+      data.set("gender", faceRects[0].gender);
+      data.set("teeth", faceRects[0].teeth);
       fetch(SERVER + "/swap", {
         method: "POST",
         body: data,
       })
         .then((res) => res.json())
         .then(({ image }) => {
-          console.log(image);
+          setResult(image);
         });
     },
     [image]
@@ -115,7 +122,13 @@ function App() {
         </Form>
       </Col>
       <Col md={6} lg={5}>
-        A
+        {result && (
+          <img
+            src={"data:;base64," + result}
+            alt=""
+            style={{ width: "100%" }}
+          />
+        )}
       </Col>
       <Col lg={1} />
     </Row>

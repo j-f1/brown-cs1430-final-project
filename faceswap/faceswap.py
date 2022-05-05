@@ -13,13 +13,27 @@ def extract_index_nparray(nparray):
         break
     return index
 
-def swap_faces(img_path1, img2):
-    #source image 
+
+# use python dlib to get the face
+# get frontal_face_detector uses a HOG + Linear SVM face detection method which is faster than the CNN alternative
+# an alternative option would be to use a CNN face detector which I believe is able to better identify faces in different angles, lightings, etc
+face_detector = get_frontal_face_detector()
+
+
+# can use any shape predictor or could also train our own
+# downloaded the shape predictor 68 face landmark model which returns 68 key points in the face
+# this model came from this link: https://github.com/davisking/dlib-models
+shape_predictor_path = "shape_predictor_68_face_landmarks.dat"
+face_landmarks_predictor = shape_predictor(shape_predictor_path)
+
+
+def swap_face(img_path1, img2, dest_face):
+    # source image
     src_img_path = img_path1
     src_img = cv2.imread(src_img_path, 1)
     bw_src_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
 
-    #destination image 
+    # destination image
     # dest_img_path = img_path2
     # dest_img = cv2.imread(dest_img_path, 1)
     dest_img = img2
@@ -27,20 +41,9 @@ def swap_faces(img_path1, img2):
 
     mask = np.zeros_like(bw_src_img)
 
-    # use python dlib to get the face
-    # get frontal_face_detector uses a HOG + Linear SVM face detection method which is faster than the CNN alternative
-    # an alternative option would be to use a CNN face detector which I believe is able to better identify faces in different angles, lightings, etc
-    face_detector = get_frontal_face_detector()
-
-    # can use any shape predictor or could also train our own
-    # downloaded the shape predictor 68 face landmark model which returns 68 key points in the face
-    # this model came from this link: https://github.com/davisking/dlib-models
-    shape_predictor_path = "shape_predictor_68_face_landmarks.dat"
-    face_landmarks_predictor = shape_predictor(shape_predictor_path)
-
     new_face = np.zeros((dest_img.shape), np.uint8)
 
-    #Source image
+    # Source image
     faces = face_detector(bw_src_img)
     for face in faces:
         landmarks = face_landmarks_predictor(bw_src_img, face)
@@ -48,7 +51,9 @@ def swap_faces(img_path1, img2):
         landmarks_points = []
 
         for points in range(num_landmarks):
-            landmarks_points.append((landmarks.part(points).x, landmarks.part(points).y))
+            landmarks_points.append(
+                (landmarks.part(points).x, landmarks.part(points).y)
+            )
 
         points = np.array(landmarks_points)
         convexhull = cv2.convexHull(points)
@@ -82,46 +87,42 @@ def swap_faces(img_path1, img2):
                 triangle = [index1, index2, index3]
                 indexes_triangles.append(triangle)
 
+    # Destination image
+    # face_tris = []
+    landmarks = face_landmarks_predictor(bw_dest_img, dest_face)
+    landmarks_points2 = []
 
-    #Destination image 
-    dest_faces = face_detector(bw_dest_img)
-    face_tris = []
-    for face in dest_faces:
-        landmarks = face_landmarks_predictor(bw_dest_img, face)
-        landmarks_points2 = []
-        
-        for points in range(num_landmarks):
-            landmarks_points2.append((landmarks.part(points).x, landmarks.part(points).y))
+    for points in range(num_landmarks):
+        landmarks_points2.append((landmarks.part(points).x, landmarks.part(points).y))
 
-        points2 = np.array(landmarks_points2, np.int32)
-        convexhull2 = cv2.convexHull(points2)
+    points2 = np.array(landmarks_points2, np.int32)
+    convexhull2 = cv2.convexHull(points2)
 
-        #Delaunay triangulation to get triangles in between each landmark point found
-        rect2 = cv2.boundingRect(convexhull2)
-        subdiv2 = cv2.Subdiv2D(rect2)
-        subdiv2.insert(landmarks_points2)
-        triangles2 = np.array(subdiv2.getTriangleList())
+    # Delaunay triangulation to get triangles in between each landmark point found
+    # rect2 = cv2.boundingRect(convexhull2)
+    # subdiv2 = cv2.Subdiv2D(rect2)
+    # subdiv2.insert(landmarks_points2)
+    # triangles2 = np.array(subdiv2.getTriangleList())
 
-        areas = 0.5 * (
-            triangles2[:, 0] * (triangles2[:, 3] - triangles2[:, 5])
-            + triangles2[:, 2] * (triangles2[:, 5] - triangles2[:, 1])
-            + triangles2[:, 4] * (triangles2[:, 1] - triangles2[:, 3])
-        )
-        triangle_xs = triangles2[:, ::2]
-        triangle_ys = triangles2[:, 1::2]
-        triangle_centers = (np.mean([triangle_xs, triangle_ys], axis=-1)).T
-        face_tris.append(
-            (triangle_centers, np.stack([[triangle_xs], [triangle_ys]], axis=-1), areas)
-        )
-
+    # areas = 0.5 * (
+    #     triangles2[:, 0] * (triangles2[:, 3] - triangles2[:, 5])
+    #     + triangles2[:, 2] * (triangles2[:, 5] - triangles2[:, 1])
+    #     + triangles2[:, 4] * (triangles2[:, 1] - triangles2[:, 3])
+    # )
+    # triangle_xs = triangles2[:, ::2]
+    # triangle_ys = triangles2[:, 1::2]
+    # triangle_centers = (np.mean([triangle_xs, triangle_ys], axis=-1)).T
+    # face_tris.append(
+    #     (triangle_centers, np.stack([[triangle_xs], [triangle_ys]], axis=-1), areas)
+    # )
 
     lines_space_mask = np.zeros_like(bw_src_img)
     lines_space_new_face = np.zeros_like(dest_img)
 
-    #triangulation of both the faces 
+    # triangulation of both the faces
     for triangle_index in indexes_triangles:
-        
-        #triangulation of the first face
+
+        # triangulation of the first face
         tr1_pt1 = landmarks_points[triangle_index[0]]
         tr1_pt2 = landmarks_points[triangle_index[1]]
         tr1_pt3 = landmarks_points[triangle_index[2]]
@@ -130,11 +131,18 @@ def swap_faces(img_path1, img2):
         # rect1 = cv2.boundingRect(triangle1)
         # (x, y, w, h) = rect1
         (x, y, w, h) = cv2.boundingRect(triangle1)
-        
+
         cropped_triangle = src_img[y : y + h, x : x + w]
         cropped_tr1_mask = np.zeros((h, w), np.uint8)
 
-        points = np.array([[tr1_pt1[0] - x, tr1_pt1[1] - y],[tr1_pt2[0] - x, tr1_pt2[1] - y],[tr1_pt3[0] - x, tr1_pt3[1] - y],],np.int32,)
+        points = np.array(
+            [
+                [tr1_pt1[0] - x, tr1_pt1[1] - y],
+                [tr1_pt2[0] - x, tr1_pt2[1] - y],
+                [tr1_pt3[0] - x, tr1_pt3[1] - y],
+            ],
+            np.int32,
+        )
 
         cv2.fillConvexPoly(cropped_tr1_mask, points, 255)
 
@@ -151,7 +159,6 @@ def swap_faces(img_path1, img2):
         triangle2 = np.array([tr2_pt1, tr2_pt2, tr2_pt3], np.int32)
 
         (x, y, w, h) = cv2.boundingRect(triangle2)
-        
 
         cropped_tr2_mask = np.zeros((h, w), np.uint8)
 
@@ -171,19 +178,26 @@ def swap_faces(img_path1, img2):
         points2 = np.float32(points2)
         M = cv2.getAffineTransform(points, points2)
         warped_triangle = cv2.warpAffine(cropped_triangle, M, (w, h))
-        warped_triangle = cv2.bitwise_and(warped_triangle, warped_triangle, mask=cropped_tr2_mask)
+        warped_triangle = cv2.bitwise_and(
+            warped_triangle, warped_triangle, mask=cropped_tr2_mask
+        )
 
         # Reconstructing destination face
         img2_new_face_rect_area = new_face[y : y + h, x : x + w]
-        img2_new_face_rect_area_gray = cv2.cvtColor(img2_new_face_rect_area, cv2.COLOR_BGR2GRAY)
+        img2_new_face_rect_area_gray = cv2.cvtColor(
+            img2_new_face_rect_area, cv2.COLOR_BGR2GRAY
+        )
 
-        _, mask_triangles_designed = cv2.threshold(img2_new_face_rect_area_gray, 1, 255, cv2.THRESH_BINARY_INV)
+        _, mask_triangles_designed = cv2.threshold(
+            img2_new_face_rect_area_gray, 1, 255, cv2.THRESH_BINARY_INV
+        )
 
-        warped_triangle = cv2.bitwise_and(warped_triangle, warped_triangle, mask=mask_triangles_designed)
+        warped_triangle = cv2.bitwise_and(
+            warped_triangle, warped_triangle, mask=mask_triangles_designed
+        )
 
         img2_new_face_rect_area = cv2.add(img2_new_face_rect_area, warped_triangle)
         new_face[y : y + h, x : x + w] = img2_new_face_rect_area
-
 
     # Face swapped (putting 1st face into 2nd face)
     img2_face_mask = np.zeros_like(bw_dest_img)
@@ -199,7 +213,7 @@ def swap_faces(img_path1, img2):
     seamlessclone = cv2.seamlessClone(
         result, dest_img, img2_head_mask, center_face2, cv2.NORMAL_CLONE
     )
-
+    return seamlessclone
 
     # for triangle_centers, points, areas in face_tris:
     #     cv2.polylines(seamlessclone, np.int32(points[0]), True, (255, 0, 0))
@@ -214,7 +228,6 @@ def swap_faces(img_path1, img2):
     #             (255, 255, 255),
     #         )
 
-
-    cv2.imshow("seamlessclone", seamlessclone)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow("seamlessclone", seamlessclone)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
