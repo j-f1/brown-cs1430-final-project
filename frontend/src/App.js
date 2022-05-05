@@ -38,6 +38,12 @@ function App() {
       })
   }, []);
 
+  const clear = (e) => {
+    e.preventDefault()
+    setFaceRects(null)
+    setImage(null)
+  };
+
   return (
     <Row>
       <Col lg={1} />
@@ -94,6 +100,11 @@ function App() {
         <Form onSubmit={onSwap}>
           <Button className="mt-2" size="sm" type="submit">
             Swap Faces
+          </Button>
+        </Form>
+        <Form onSubmit={clear}>
+          <Button className="mt-2" size="sm" type="submit" variant="danger">
+            Clear Image
           </Button>
         </Form>
       </Col>
