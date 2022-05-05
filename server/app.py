@@ -31,9 +31,7 @@ def select_image():
 
     image = request.files["image"]
     data = image.read()
-    image = cv2.cvtColor(
-        np.array(Image.open(request.files["image"])), cv2.COLOR_BGR2GRAY
-    )
+    image = cv2.cvtColor(np.array(Image.fromarray(data)), cv2.COLOR_BGR2GRAY)
     # face-detect
     faces = [{"x": 0.1, "y": 0.2, "width": 0.05, "height": 0.1}]
     response = make_response()
