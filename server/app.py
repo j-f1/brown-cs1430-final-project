@@ -8,6 +8,7 @@ from cnn_code.predict import predict_image
 from PIL import Image
 import cv2
 import numpy as np
+from io import BytesIO
 
 app = Flask(__name__)
 
@@ -66,8 +67,8 @@ def swap_faces():
     if request.method == "OPTIONS":
         return _build_cors_preflight_response()
 
-    data = base64.b64decode(request.form["image"])
-    img = np.array(Image.open(data).convert("RGB"))
+    data = base64.b64decode(bytes(request.form["image"], encoding="ascii"))
+    img = np.array(Image.open(BytesIO(data)).convert("RGB"))
     # gender = predict_image(image)
     # print("gender", gender)
 
