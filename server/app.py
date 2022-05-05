@@ -45,6 +45,8 @@ def select_image():
     image = request.files["image"]
     data = image.read()
     img = np.array(Image.open(image).convert("RGB"))
+    gender = predict_image(img)
+    
     # face-detect
     faces, heuristics = are_there_teeth(img, annotate=False)
     response = make_response()
@@ -56,6 +58,7 @@ def select_image():
                 dlib_rect_to_dict(rect, img.shape, teeth)
                 for rect, teeth in zip(faces, heuristics)
             ],
+            "gender": gender
         },
         response.stream,
     )
@@ -66,16 +69,15 @@ def select_image():
 def swap_faces():
     if request.method == "OPTIONS":
         return _build_cors_preflight_response()
-
+    
     data = base64.b64decode(bytes(request.form["image"], encoding="ascii"))
     img = np.array(Image.open(BytesIO(data)).convert("RGB"))
-    gender = predict_image(img)
 
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
     json.dump(
         {
-            "image": gender,
+            "image": "Working!",
         },
         response.stream,
     )
