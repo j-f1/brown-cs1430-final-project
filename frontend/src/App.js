@@ -27,17 +27,22 @@ function App() {
       });
   }, []);
 
-  const onSwap = useCallback((e) => {
-    e.preventDefault();
-    fetch(SERVER + "/swap", {
-      method: "POST",
-      body: image,
-    })
-      .then((res) => res.json())
-      .then(({ image }) => {
-        console.log(image);
-      });
-  }, []);
+  const onSwap = useCallback(
+    (e) => {
+      e.preventDefault();
+      const data = new FormData();
+      data.set("image", image);
+      fetch(SERVER + "/swap", {
+        method: "POST",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then(({ image }) => {
+          console.log(image);
+        });
+    },
+    [image]
+  );
 
   const clear = (e) => {
     e.preventDefault();

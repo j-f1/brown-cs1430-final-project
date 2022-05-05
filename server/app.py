@@ -1,4 +1,3 @@
-from re import S
 from flask import Flask, request, make_response
 import json
 import base64
@@ -67,10 +66,9 @@ def swap_faces():
     if request.method == "OPTIONS":
         return _build_cors_preflight_response()
 
-    image = request.files["image"]
-    # data = image.read()
-    # img = np.array(Image.open(image).convert("RGB"))
-    # gender = predict_image(img)
+    data = base64.b64decode(request.form["image"])
+    img = np.array(Image.open(data).convert("RGB"))
+    # gender = predict_image(image)
     # print("gender", gender)
 
     response = make_response()
