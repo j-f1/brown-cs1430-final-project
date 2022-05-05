@@ -29,7 +29,7 @@ def are_there_teeth(img, annotate):
         if annotate:
             return img, "unknown"
         else:
-            return "unknown"
+            return [], "unknown"
 
     face = faces[0]
     mask = np.zeros_like(bw_img)
@@ -68,7 +68,7 @@ def are_there_teeth(img, annotate):
 
     if annotate:
         return out_img, (":D" if heuristic > CUTOFF else ":|")
-    return heuristic
+    return faces, heuristic
 
 
 if __name__ == "__main__":

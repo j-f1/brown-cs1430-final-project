@@ -39,7 +39,7 @@ def predict():
         dictionary[file_name] = {}
         dictionary[file_name]["teeth"] = are_there_teeth(
             (original_images[i] * 255).astype(np.uint8), annotate=False
-        )
+        )[1]
         if gender[i] == 0:
             dictionary[file_name]["gender"] = "female"
         else:

@@ -2,13 +2,22 @@ from flask import Flask, request, make_response
 import json
 import base64
 
-from faceswap import swap_face
+# from faceswap import swap_face
 from teeth import are_there_teeth
 from PIL import Image
 import cv2
 import numpy as np
 
 app = Flask(__name__)
+
+
+def dlib_rect_to_dict(rect, size):
+    return {
+        "x": rect.left() / size[1],
+        "y": rect.top() / size[0],
+        "width": rect.width() / size[1],
+        "height": rect.height() / size[0],
+    }
 
 
 @app.route("/")
@@ -31,15 +40,17 @@ def select_image():
 
     image = request.files["image"]
     data = image.read()
-    image = cv2.cvtColor(np.array(Image.fromarray(data)), cv2.COLOR_BGR2GRAY)
+    img = np.array(Image.open(image).convert("RGB"))
     # face-detect
-    faces = [{"x": 0.1, "y": 0.2, "width": 0.05, "height": 0.1}]
+    faces, heuristic = are_there_teeth(img, annotate=False)
+    print(faces, heuristic)
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
     json.dump(
         {
             "image": str(base64.encodebytes(data), encoding="ascii"),
-            "faces": faces,
+            "faces": [dlib_rect_to_dict(rect, img.shape) for rect in faces],
+            "teeth": heuristic,
         },
         response.stream,
     )
