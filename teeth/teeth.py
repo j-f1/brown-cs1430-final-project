@@ -5,14 +5,6 @@ import numpy as np
 from dlib import get_frontal_face_detector, shape_predictor
 import time
 
-vid = cv2.VideoCapture(0)
-face_detector = get_frontal_face_detector()
-
-shape_predictor_path = "../tutorial/shape_predictor_68_face_landmarks.dat"
-face_landmarks_predictor = shape_predictor(shape_predictor_path)
-
-TEETH_TRIANGLES = (111, 110)
-
 CUTOFF = 1
 
 # clrs.cc
@@ -25,21 +17,29 @@ def dlib_point_to_tuple(pt):
     return (pt.x, pt.y)
 
 
-def are_there_teeth(img):
+shape_predictor_path = "../tutorial/shape_predictor_68_face_landmarks.dat"
+face_landmarks_predictor = shape_predictor(shape_predictor_path)
+
+
+def are_there_teeth(img, annotate):
     bw_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_detector(bw_img)
-    if len(faces) == 0:
-        return img, "unknown"
+    if annotate:
+        if len(faces) == 0:
+            return img, "unknown"
+    else:
+        return "unknown"
 
     face = faces[0]
     mask = np.zeros_like(bw_img)
-    out_img = np.array(img)
-    cv2.rectangle(
-        out_img,
-        dlib_point_to_tuple(face.tl_corner()),
-        dlib_point_to_tuple(face.br_corner()),
-        GREEN,
-    )
+    if annotate:
+        out_img = np.array(img)
+        cv2.rectangle(
+            out_img,
+            dlib_point_to_tuple(face.tl_corner()),
+            dlib_point_to_tuple(face.br_corner()),
+            GREEN,
+        )
     landmarks = face_landmarks_predictor(bw_img, face)
 
     landmark_verts = np.array(
@@ -47,8 +47,9 @@ def are_there_teeth(img):
         dtype=np.int32,
     )
 
-    for vert in landmark_verts:
-        cv2.circle(out_img, vert, 2, BLUE)
+    if annotate:
+        for vert in landmark_verts:
+            cv2.circle(out_img, vert, 2, BLUE)
 
     convexhull = cv2.convexHull(landmark_verts)
     cv2.fillConvexPoly(mask, convexhull, 255)
@@ -64,21 +65,27 @@ def are_there_teeth(img):
 
     heuristic = areas[np.array(-2)] / face.area() * 1e3
 
-    return out_img, (":D" if heuristic > CUTOFF else ":|")
+    if annotate:
+        return out_img, (":D" if heuristic > CUTOFF else ":|")
+    return heuristic
 
 
-while True:
-    ok, img = vid.read()
-    if not ok:
-        break
+if __name__ == "__main__":
+    vid = cv2.VideoCapture(0)
+    face_detector = get_frontal_face_detector()
 
-    out_img, status = are_there_teeth(img)
-    cv2.putText(out_img, status, (100, 100), cv2.FONT_HERSHEY_PLAIN, 2, PURPLE)
-    cv2.imshow("frame", out_img)
+    while True:
+        ok, img = vid.read()
+        if not ok:
+            break
 
-    if cv2.waitKey(1) == 0o33:
-        # esc
-        break
+        out_img, status = are_there_teeth(img, annotate=True)
+        cv2.putText(out_img, status, (100, 100), cv2.FONT_HERSHEY_PLAIN, 2, PURPLE)
+        cv2.imshow("frame", out_img)
 
-cv2.destroyAllWindows()
-vid.release()
+        if cv2.waitKey(1) == 0o33:
+            # esc
+            break
+
+    cv2.destroyAllWindows()
+    vid.release()
