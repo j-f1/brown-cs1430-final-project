@@ -4,8 +4,8 @@ from PIL import Image
 import numpy as np
 import json
 
-import hyperparameters as hp
-from models import YourModel
+from .import hyperparameters as hp
+from .models import YourModel
 
 from teeth import are_there_teeth
 
@@ -15,7 +15,7 @@ def predict():
     model = YourModel()
     model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
     model.load_weights(
-        "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5"
+        os.path.join(os.path.dirname(__file__), "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5")
     )
 
     # Assign data path
@@ -132,5 +132,33 @@ def standardize(data_path):
 
     return original, data_sample, file_list
 
+def predict_image(image):
+    """Predict gender classificartion for image.
 
-predict()
+        Arguments: Numpy arrray representing image
+
+        Returns: String representing gender classification
+    """
+    
+    model = YourModel()
+    model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
+    model.load_weights(
+        "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5"
+    )
+    
+    img = image.resize((hp.img_size, hp.img_size))
+    img = np.array(img, dtype=np.float32)
+    img /= 255.0
+
+    # Grayscale -> RGB
+    if len(img.shape) == 2:
+        img = np.stack([img, img, img], axis=-1)
+
+    predictions = model.predict(img, verbose=1)
+    gender = np.argmax(predictions, axis=1)
+    if gender[0] == 0:
+        return "female"
+    else:
+        return "male"
+    
+#predict()
