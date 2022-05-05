@@ -39,8 +39,12 @@ def select_image():
     )
     return response
 
-@app.route("/swap", methods=["POST"])
+
+@app.route("/swap", methods=["POST", "OPTIONS"])
 def swap_faces():
+    if request.method == "OPTIONS":
+        return _build_cors_preflight_response()
+
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
     json.dump(
