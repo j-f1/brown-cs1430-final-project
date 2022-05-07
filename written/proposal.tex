@@ -95,7 +95,7 @@ Our idea is to create a tool for replacing faces in an image with a randomly-gen
 
 We will construct a dataset of pre-generated anonymous faces, and we will use a pre-trained model to locate faces in the input images.
 
-The bulk of our work will focus on finding a good match from the set of anonymous faces. We will attempt to select an appropriate replacement face by matching up skin tone, gender, and possibly age/expression, and angle. We will also need to extract the replacement face from its background, and potentially adjust lighting (shadows falling on the face?).
+The bulk of our work will focus on finding a good match from the set of anonymous faces. We will attempt to select an appropriate replacement face by matching up skin tone, sex, and possibly age/expression, and angle. We will also need to extract the replacement face from its background, and potentially adjust lighting (shadows falling on the face?).
 
 \section*{Socio-Historical Context}
 
@@ -135,7 +135,7 @@ We plan to build the custom code in Python. We'll use our laptops and the CS mac
 
 Team member A:
 \begin{itemize}
-    \item skin tone/gender estimation
+    \item skin tone/sex estimation
     \item build the UI/CLI for interacting with this tool
 \end{itemize}
 
@@ -171,7 +171,7 @@ Team member J:
 
 One technical problem that we foresee is how computationally expensive this tool will be. It will be important to ensure that this tool runs fast enough in order to be usable, especially if we decide to implement live webcam anonymization.
 
-Another problem we forsee is how well we will be able to replace faces that match the gender of the person we are trying to anonymize.
+Another problem we forsee is how well we will be able to replace faces that match the sex of the person we are trying to anonymize.
 
 Another potential technical problem could be performing feature matching on a face without glasses with a face with glasses. We would need to determine a way to ignore detected features from the glasses when matching and re-sizing faces.
 

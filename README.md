@@ -17,8 +17,8 @@ pip install -r requirements.txt
 - https://www.kaggle.com/datasets/dadajonjurakuziev/movieposter
 - https://www.kaggle.com/datasets/xuejunz/film-posters-information
 - https://www.kaggle.com/datasets/spiyer/old-film-restoration-dataset
-- https://www.kaggle.com/datasets/cashutosh/gender-classification-dataset/code (could be used for training a model for gender classification)
-- https://www.kaggle.com/gpiosenka/gender-classification-from-an-image (smaller gender data set, in repo currently)
+- https://www.kaggle.com/datasets/cashutosh/gender-classification-dataset/code (could be used for training a model for sex classification)
+- https://www.kaggle.com/gpiosenka/gender-classification-from-an-image (smaller sex data set, in repo currently)
 - https://drive.google.com/drive/folders/1-0YhtXe_oE2ei0R471X33a_NJyY5dVge
 
 
@@ -28,7 +28,7 @@ pip install -r requirements.txt
 
 - look into pretrained facial feature models
   - https://pypi.org/project/dlib/
-- guessing gender
+- guessing sex
   - might need to train a secondary model
   - start by not worrying about this, mismatches are ok
   - instead get it working good first

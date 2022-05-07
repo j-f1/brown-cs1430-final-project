@@ -6,9 +6,10 @@ import json
 
 from .import hyperparameters as hp
 from .models import YourModel
+# import hyperparameters as hp
+# from models import YourModel
 
 from teeth import are_there_teeth
-
 
 def predict():
     # Creating model
@@ -28,8 +29,8 @@ def predict():
 
     print("Predictions shape", predictions.shape)
 
-    gender = np.argmax(predictions, axis=1)
-    print("Gender shape", gender.shape)
+    sex = np.argmax(predictions, axis=1)
+    print("Sex shape", sex.shape)
 
     dictionary = {}
 
@@ -40,10 +41,10 @@ def predict():
         dictionary[file_name]["teeth"] = are_there_teeth(
             (original_images[i] * 255).astype(np.uint8), annotate=False
         )[1]
-        if gender[i] == 0:
-            dictionary[file_name]["gender"] = "female"
+        if sex[i] == 0:
+            dictionary[file_name]["sex"] = "female"
         else:
-            dictionary[file_name]["gender"] = "male"
+            dictionary[file_name]["sex"] = "male"
 
     # the json
     #  where the output must be stored
@@ -89,15 +90,33 @@ def standardize(data_path):
 
         data_sample[i] = img
 
-    # TODO: Calculate the pixel-wise mean and standard deviation
-    #       of the images in data_sample and store them in
-    #       self.mean and self.std respectively.
-    # ==========================================================
+    #calculating the mean and std from the training data
+    training_path = "." + os.sep + "data" + os.sep + "train" + os.sep
+    training_file_list = []
+    for root, _, files in os.walk(training_path):
+        for name in files:
+            training_file_list.append(os.path.join(root, name))
+            
+    num_train = len(training_file_list)
+    # Allocate space in memory for images
+    training_sample = np.zeros((num_train, hp.img_size, hp.img_size, 3))
+    
+    for i, file_path in enumerate(training_file_list):
+        if i % 10 == 0:
+            print(f"\rReading {i:04}", end="")
+        img = Image.open(file_path)
+        img = img.resize((hp.img_size, hp.img_size))
+        img = np.array(img, dtype=np.float32)
+        img /= 255.0
 
-    mean = np.mean(data_sample, axis=0)
-    std = np.std(data_sample, axis=0)
+        # Grayscale -> RGB
+        if len(img.shape) == 2:
+            img = np.stack([img, img, img], axis=-1)
 
-    # ==========================================================
+        training_sample[i] = img
+    
+    mean = np.mean(training_sample, axis=0)
+    std = np.std(training_sample, axis=0)
 
     print(
         "Dataset mean shape: [{0}, {1}, {2}]".format(
@@ -133,32 +152,74 @@ def standardize(data_path):
     return original, data_sample, file_list
 
 def predict_image(image):
-    """Predict gender classificartion for image.
+    """Predict sex classificartion for image.
 
         Arguments: Numpy arrray representing image
 
-        Returns: String representing gender classification
+        Returns: String representing sex classification
     """
     
     model = YourModel()
     model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
     model.load_weights(
-        "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5"
+        os.path.join(os.path.dirname(__file__), "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5")
     )
-    
-    img = image.resize((hp.img_size, hp.img_size))
+        
+    img = np.resize(image, (hp.img_size, hp.img_size))
     img = np.array(img, dtype=np.float32)
     img /= 255.0
+    print("IMAGE SHAPE", img.shape)
 
     # Grayscale -> RGB
     if len(img.shape) == 2:
         img = np.stack([img, img, img], axis=-1)
+        
+    data_sample = np.zeros((1, hp.img_size, hp.img_size, 3))
+    data_sample[0] = img
+    
+    #calculating the mean and std from the training data
+    training_path = "." + os.sep + "data" + os.sep + "train" + os.sep
+    training_file_list = []
+    for root, _, files in os.walk(training_path):
+        for name in files:
+            training_file_list.append(os.path.join(root, name))
+            
+    num_train = len(training_file_list)
+    # Allocate space in memory for images
+    training_sample = np.zeros((num_train, hp.img_size, hp.img_size, 3))
+    
+    for i, file_path in enumerate(training_file_list):
+        if i % 10 == 0:
+            print(f"\rReading {i:04}", end="")
+        img = Image.open(file_path)
+        img = img.resize((hp.img_size, hp.img_size))
+        img = np.array(img, dtype=np.float32)
+        img /= 255.0
 
-    predictions = model.predict(img, verbose=1)
-    gender = np.argmax(predictions, axis=1)
-    if gender[0] == 0:
+        # Grayscale -> RGB
+        if len(img.shape) == 2:
+            img = np.stack([img, img, img], axis=-1)
+
+        training_sample[i] = img
+    
+    mean = np.mean(training_sample, axis=0)
+    std = np.std(training_sample, axis=0)
+    
+    img = data_sample[0]
+    img = (img - mean) / std
+    data_sample[0] = img
+    
+    print(data_sample)
+
+    predictions = model.predict(data_sample, verbose=1)
+    print(predictions)
+    sex = np.argmax(predictions, axis=1)
+    print(sex)
+    if sex[0] == 0:
         return "female"
     else:
         return "male"
     
-#predict()
+# predict()
+# img = Image.open("../ai_faces/099005.png")
+# predict_image(img)
