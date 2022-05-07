@@ -20,8 +20,9 @@ function App() {
       body: new FormData(formRef.current),
     })
       .then((res) => res.json())
-      .then(({ image, faces }) => {
+      .then(({ image, faces, sex }) => {
         console.log(faces);
+        console.log(sex);
         setImage(image);
         setFaceRects(faces);
       });
