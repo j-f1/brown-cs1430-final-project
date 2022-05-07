@@ -45,7 +45,7 @@ def select_image():
     image = request.files["image"]
     data = image.read()
     img = np.array(Image.open(image).convert("RGB"))
-    gender = predict_image(img)
+    sex = predict_image(img)
     
     # face-detect
     faces, heuristics = are_there_teeth(img, annotate=False)
@@ -58,7 +58,7 @@ def select_image():
                 dlib_rect_to_dict(rect, img.shape, teeth)
                 for rect, teeth in zip(faces, heuristics)
             ],
-            "gender": gender
+            "sex": sex
         },
         response.stream,
     )
