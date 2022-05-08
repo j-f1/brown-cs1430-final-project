@@ -12,6 +12,7 @@ function App() {
   const [image, setImage] = useState(null);
   const [result, setResult] = useState(null);
   const [faceRects, setFaceRects] = useState(null);
+  const [sex, setSex] = useState(null);
   /** @type {React.MutableRefObject<HTMLFormElement>} */
   const formRef = useRef();
 
@@ -23,7 +24,7 @@ function App() {
       .then((res) => res.json())
       .then(({ image, faces, sex }) => {
         console.log(faces);
-        console.log(sex);
+        setSex(sex);
         setImage(image);
         setFaceRects(faces);
       });
@@ -38,8 +39,8 @@ function App() {
       data.set("y", faceRects[0].y);
       data.set("width", faceRects[0].width);
       data.set("height", faceRects[0].height);
-      data.set("gender", faceRects[0].gender);
-      data.set("teeth", faceRects[0].teeth);
+      data.set("sex", sex);
+      data.set("teeth", faceRects[0].teeth_heuristic);
       fetch(SERVER + "/swap", {
         method: "POST",
         body: data,

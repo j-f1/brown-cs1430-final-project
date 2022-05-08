@@ -3,6 +3,7 @@ import json
 import base64
 import os
 import dlib
+import random
 
 import faceswap
 from teeth import are_there_teeth, CUTOFF
@@ -12,7 +13,7 @@ import cv2
 import numpy as np
 from io import BytesIO
 
-from claire import select_face
+from matching import find_matches
 
 app = Flask(__name__)
 
@@ -50,7 +51,7 @@ def select_image():
     data = image.read()
     img = np.array(Image.open(image).convert("RGB"))
     sex = predict_image(img)
-    
+
     # face-detect
     faces, heuristics = are_there_teeth(img, annotate=False)
     response = make_response()
@@ -62,7 +63,7 @@ def select_image():
                 dlib_rect_to_dict(rect, img.shape, teeth)
                 for rect, teeth in zip(faces, heuristics)
             ],
-            "sex": sex
+            "sex": sex,
         },
         response.stream,
     )
@@ -79,33 +80,34 @@ def swap_faces():
 
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
-    json.dump(
-        {
-            "image": "Working!",
-        },
-        response.stream,
-    )
-    return response
 
-    face_id = select_face(gender=request.form["gender"], teeth=request.form["teeth"])
+    faces = find_matches(sex=request.form["sex"], teeth=request.form["teeth"])
 
-    result = faceswap.swap_faces(
+    face_id = random.choice(faces)
+
+    result = faceswap.swap_face(
         os.path.join(os.path.dirname(__file__), "../ai_faces/" + face_id + ".png"),
         img,
         dlib.rectangle(
-            float(request.form["x"]),
-            float(request.form["y"]),
-            float(request.form["width"]) + float(request.form["x"]),
-            float(request.form["height"]) + float(request.form["y"]),
+            int(float(request.form["x"]) * img.shape[1]),
+            int(float(request.form["y"]) * img.shape[0]),
+            int(
+                (float(request.form["width"]) + float(request.form["x"])) * img.shape[1]
+            ),
+            int(
+                (float(request.form["height"]) + float(request.form["y"]))
+                * img.shape[0]
+            ),
         ),
     )
 
     json.dump(
         {
             "image": str(
-                base64.encodebytes(cv2.imencode(".png", result)),
+                base64.encodebytes(cv2.imencode(".png", result)[1]),
                 encoding="ascii",
             ),
         },
         response.stream,
     )
+    return response

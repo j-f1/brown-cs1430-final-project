@@ -1,13 +1,16 @@
-import json 
+import json
 
-def find_matches(gender, teeth):
-    f = open('image_data.json')
+with open("../image_data.json") as f:
     data = json.load(f)
 
+
+def find_matches(sex, teeth):
     options = []
 
-    for image in data:
-        if(image.get("gender") == gender and image.get("teeth") == teeth):
-            options.append(image)
+    for key, image in data.items():
+        if len(image.get("teeth")) == 0:
+            continue
+        if image.get("sex") == sex and abs(image.get("teeth")[0] - float(teeth)) < 0.1:
+            options.append(key)
 
-
+    return options

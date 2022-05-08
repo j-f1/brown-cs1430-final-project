@@ -218,8 +218,7 @@ def predict_image(image):
     img = (img - mean) / std
     data_sample[0] = img
 
-    print(img)
-    print(data_sample)
+    print("data_sample", img)
 
     predictions = model.predict(data_sample, verbose=1)
     print(predictions)
