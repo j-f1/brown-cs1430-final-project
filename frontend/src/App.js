@@ -57,6 +57,7 @@ function App() {
     e.preventDefault();
     setFaceRects(null);
     setImage(null);
+    setResult(null);
   };
 
   return (
