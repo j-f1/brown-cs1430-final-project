@@ -64,7 +64,7 @@ function App() {
         .then(({ image, face_id }) => {
           console.log((+new Date() - startRef.current) / 1e3);
           setResult(image);
-          setFaceID(face_id);
+          setFaceID((old) => old || face_id);
         });
     },
     [faceID, faceRects, image, sex]
