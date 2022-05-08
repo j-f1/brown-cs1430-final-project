@@ -2,7 +2,7 @@
 
 import cv2
 import numpy as np
-from dlib import get_frontal_face_detector, shape_predictor
+from dlib import get_frontal_face_detector, shape_predictor, cnn_face_detection_model_v1
 import time
 
 CUTOFF = 0.8
@@ -19,12 +19,13 @@ def dlib_point_to_tuple(pt):
 
 shape_predictor_path = "../faceswap/shape_predictor_68_face_landmarks.dat"
 face_landmarks_predictor = shape_predictor(shape_predictor_path)
-face_detector = get_frontal_face_detector()
+face_detector = cnn_face_detection_model_v1("../faceswap/mmod_human_face_detector.dat")
+# face_detector = get_frontal_face_detector()
 
 
 def are_there_teeth(img, annotate):
     bw_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    faces = face_detector(bw_img)
+    faces = [result.rect for result in face_detector(img)]
     if len(faces) == 0:
         if annotate:
             return img, "unknown"
