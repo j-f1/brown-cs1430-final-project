@@ -3,26 +3,38 @@ import "./App.css";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 
 const SERVER = "http://localhost.proxyman.io:5000";
 
 function App() {
+  const [usingCamera, setUsingCamera] = useState(false);
   const [image, setImage] = useState(null);
   const [result, setResult] = useState(null);
   const [faceRects, setFaceRects] = useState(null);
   const [sex, setSex] = useState(null);
+
   /** @type {React.MutableRefObject<HTMLFormElement>} */
   const formRef = useRef();
+  /** @type {React.MutableRefObject<number>} */
+  const startRef = useRef();
+  /** @type {React.MutableRefObject<HTMLCanvasElement>} */
+  const canvasRef = useRef();
+  /** @type {React.MutableRefObject<HTMLVideoElement>} */
+  const videoRef = useRef();
 
-  const onSelect = useCallback(() => {
+  const onSelect = useCallback((blob) => {
+    startRef.current = +new Date();
+    const data = new FormData(formRef.current || undefined);
+    if (blob) data.set("image", blob, "blob");
     fetch(SERVER + "/select-image", {
       method: "POST",
-      body: new FormData(formRef.current),
+      body: data,
     })
       .then((res) => res.json())
       .then(({ image, faces, sex }) => {
+        console.log((+new Date() - startRef.current) / 1e3);
         console.log(faces);
         setSex(sex);
         setImage(image);
@@ -32,7 +44,8 @@ function App() {
 
   const onSwap = useCallback(
     (e) => {
-      e.preventDefault();
+      startRef.current = +new Date();
+      e?.preventDefault();
       const data = new FormData();
       data.set("image", image);
       data.set("x", faceRects[0].x);
@@ -47,11 +60,39 @@ function App() {
       })
         .then((res) => res.json())
         .then(({ image }) => {
+          console.log((+new Date() - startRef.current) / 1e3);
           setResult(image);
         });
     },
     [image]
   );
+
+  useEffect(() => {
+    if (faceRects?.length) {
+      onSwap();
+    }
+  }, [onSwap, faceRects]);
+
+  const onToggleCamera = async () => {
+    setUsingCamera(true);
+    let stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: false,
+    });
+    videoRef.current.srcObject = stream;
+    setInterval(() => {
+      canvasRef.current
+        .getContext("2d")
+        .drawImage(
+          videoRef.current,
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
+      canvasRef.current.toBlob(onSelect, "image/png");
+    }, 500);
+  };
 
   const clear = (e) => {
     e.preventDefault();
@@ -113,6 +154,13 @@ function App() {
             </Form.Group>
           </Form>
         )}
+        {!usingCamera && (
+          <Form onSubmit={onToggleCamera}>
+            <Button className="mt-2" size="sm" type="submit" variant="success">
+              Use Camera
+            </Button>
+          </Form>
+        )}
         <Form onSubmit={onSwap}>
           <Button className="mt-2" size="sm" type="submit">
             Swap Faces
@@ -134,6 +182,13 @@ function App() {
         )}
       </Col>
       <Col lg={1} />
+      <video width="320" height="240" autoPlay ref={videoRef} hidden></video>
+      <canvas
+        width="320"
+        height="240"
+        ref={canvasRef}
+        style={{ width: 100 }}
+      ></canvas>
     </Row>
   );
 }
