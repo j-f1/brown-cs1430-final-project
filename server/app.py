@@ -104,7 +104,9 @@ def swap_faces():
     json.dump(
         {
             "image": str(
-                base64.encodebytes(cv2.imencode(".png", result)[1]),
+                base64.encodebytes(
+                    cv2.imencode(".png", cv2.cvtColor(result, cv2.COLOR_BGR2RGB))[1]
+                ),
                 encoding="ascii",
             ),
         },

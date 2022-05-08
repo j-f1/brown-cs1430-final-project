@@ -23,7 +23,7 @@ face_detector = get_frontal_face_detector()
 
 
 def are_there_teeth(img, annotate):
-    bw_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    bw_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     faces = face_detector(bw_img)
     if len(faces) == 0:
         if annotate:
