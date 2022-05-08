@@ -4,19 +4,24 @@ from PIL import Image
 import numpy as np
 import json
 
-from .import hyperparameters as hp
+from . import hyperparameters as hp
 from .models import YourModel
+
 # import hyperparameters as hp
 # from models import YourModel
 
 from teeth import are_there_teeth
+
 
 def predict():
     # Creating model
     model = YourModel()
     model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
     model.load_weights(
-        os.path.join(os.path.dirname(__file__), "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5")
+        os.path.join(
+            os.path.dirname(__file__),
+            "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5",
+        )
     )
 
     # Assign data path
@@ -90,17 +95,17 @@ def standardize(data_path):
 
         data_sample[i] = img
 
-    #calculating the mean and std from the training data
+    # calculating the mean and std from the training data
     training_path = "." + os.sep + "data" + os.sep + "train" + os.sep
     training_file_list = []
     for root, _, files in os.walk(training_path):
         for name in files:
             training_file_list.append(os.path.join(root, name))
-            
+
     num_train = len(training_file_list)
     # Allocate space in memory for images
     training_sample = np.zeros((num_train, hp.img_size, hp.img_size, 3))
-    
+
     for i, file_path in enumerate(training_file_list):
         if i % 10 == 0:
             print(f"\rReading {i:04}", end="")
@@ -114,7 +119,7 @@ def standardize(data_path):
             img = np.stack([img, img, img], axis=-1)
 
         training_sample[i] = img
-    
+
     mean = np.mean(training_sample, axis=0)
     std = np.std(training_sample, axis=0)
 
@@ -151,20 +156,24 @@ def standardize(data_path):
 
     return original, data_sample, file_list
 
+
 def predict_image(image):
     """Predict sex classificartion for image.
 
-        Arguments: Numpy arrray representing image
+    Arguments: Numpy arrray representing image
 
-        Returns: String representing sex classification
+    Returns: String representing sex classification
     """
-    
+
     model = YourModel()
     model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
     model.load_weights(
-        os.path.join(os.path.dirname(__file__), "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5")
+        os.path.join(
+            os.path.dirname(__file__),
+            "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5",
+        )
     )
-        
+
     img = np.resize(image, (hp.img_size, hp.img_size))
     img = np.array(img, dtype=np.float32)
     img /= 255.0
@@ -173,21 +182,21 @@ def predict_image(image):
     # Grayscale -> RGB
     if len(img.shape) == 2:
         img = np.stack([img, img, img], axis=-1)
-        
+
     data_sample = np.zeros((1, hp.img_size, hp.img_size, 3))
     data_sample[0] = img
-    
-    #calculating the mean and std from the training data
+
+    # calculating the mean and std from the training data
     training_path = "." + os.sep + "data" + os.sep + "train" + os.sep
     training_file_list = []
     for root, _, files in os.walk(training_path):
         for name in files:
             training_file_list.append(os.path.join(root, name))
-            
+
     num_train = len(training_file_list)
     # Allocate space in memory for images
     training_sample = np.zeros((num_train, hp.img_size, hp.img_size, 3))
-    
+
     for i, file_path in enumerate(training_file_list):
         if i % 10 == 0:
             print(f"\rReading {i:04}", end="")
@@ -201,14 +210,15 @@ def predict_image(image):
             img = np.stack([img, img, img], axis=-1)
 
         training_sample[i] = img
-    
+
     mean = np.mean(training_sample, axis=0)
     std = np.std(training_sample, axis=0)
-    
+
     img = data_sample[0]
     img = (img - mean) / std
     data_sample[0] = img
-    
+
+    print(img)
     print(data_sample)
 
     predictions = model.predict(data_sample, verbose=1)
@@ -219,7 +229,8 @@ def predict_image(image):
         return "female"
     else:
         return "male"
-    
+
+
 # predict()
 # img = Image.open("../ai_faces/099005.png")
 # predict_image(img)
