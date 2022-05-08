@@ -157,35 +157,21 @@ def standardize(data_path):
     return original, data_sample, file_list
 
 
-def predict_image(image):
-    """Predict sex classificartion for image.
-
-    Arguments: Numpy arrray representing image
-
-    Returns: String representing sex classification
-    """
-
-    model = YourModel()
-    model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
-    model.load_weights(
-        os.path.join(
-            os.path.dirname(__file__),
-            "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5",
-        )
+model = YourModel()
+model(tf.keras.Input(shape=(hp.img_size, hp.img_size, 3)))
+model.load_weights(
+    os.path.join(
+        os.path.dirname(__file__),
+        "checkpoints/your_model/050322-162304/your.weights.e009-acc0.9450.h5",
     )
+)
 
-    img = np.resize(image, (hp.img_size, hp.img_size))
-    img = np.array(img, dtype=np.float32)
-    img /= 255.0
-    print("IMAGE SHAPE", img.shape)
-
-    # Grayscale -> RGB
-    if len(img.shape) == 2:
-        img = np.stack([img, img, img], axis=-1)
-
-    data_sample = np.zeros((1, hp.img_size, hp.img_size, 3))
-    data_sample[0] = img
-
+try:
+    with open("normalization.json") as f:
+        data = json.load(f)
+        mean = np.array(data["mean"])
+        std = np.array(data["std"])
+except:
     # calculating the mean and std from the training data
     training_path = "." + os.sep + "data" + os.sep + "train" + os.sep
     training_file_list = []
@@ -214,11 +200,35 @@ def predict_image(image):
     mean = np.mean(training_sample, axis=0)
     std = np.std(training_sample, axis=0)
 
+    with open("normalization.json", mode="w") as f:
+        json.dump({"mean": mean.tolist(), "std": std.tolist()}, f)
+
+
+def predict_image(image):
+    """Predict sex classificartion for image.
+
+    Arguments: Numpy arrray representing image
+
+    Returns: String representing sex classification
+    """
+
+    img = np.resize(image, (hp.img_size, hp.img_size))
+    img = np.array(img, dtype=np.float32)
+    img /= 255.0
+    print("IMAGE SHAPE", img.shape)
+
+    # Grayscale -> RGB
+    if len(img.shape) == 2:
+        img = np.stack([img, img, img], axis=-1)
+
+    data_sample = np.zeros((1, hp.img_size, hp.img_size, 3))
+    data_sample[0] = img
+
     img = data_sample[0]
     img = (img - mean) / std
     data_sample[0] = img
 
-    print("data_sample", img)
+    # print("data_sample", img)
 
     predictions = model.predict(data_sample, verbose=1)
     print(predictions)
