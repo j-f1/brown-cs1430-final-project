@@ -81,9 +81,13 @@ def swap_faces():
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
 
-    faces = find_matches(sex=request.form["sex"], teeth=request.form["teeth"])
-
-    face_id = random.choice(faces)
+    if request.form.get("face_id", default="null") != "null":
+        face_id = request.form["face_id"]
+        print(face_id)
+    else:
+        faces = find_matches(sex=request.form["sex"], teeth=request.form["teeth"])
+        print(f"{len(faces)} options")
+        face_id = random.choice(faces)
 
     result = faceswap.swap_face(
         os.path.join(os.path.dirname(__file__), "../ai_faces/" + face_id + ".png"),
@@ -109,7 +113,9 @@ def swap_faces():
                 ),
                 encoding="ascii",
             ),
+            "face_id": face_id,
         },
         response.stream,
     )
+    print("done")
     return response

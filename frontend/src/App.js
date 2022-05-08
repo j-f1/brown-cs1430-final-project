@@ -14,6 +14,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [faceRects, setFaceRects] = useState(null);
   const [sex, setSex] = useState(null);
+  const [faceID, setFaceID] = useState(null);
 
   /** @type {React.MutableRefObject<HTMLFormElement>} */
   const formRef = useRef();
@@ -54,17 +55,19 @@ function App() {
       data.set("height", faceRects[0].height);
       data.set("sex", sex);
       data.set("teeth", faceRects[0].teeth_heuristic);
+      data.set("face_id", faceID);
       fetch(SERVER + "/swap", {
         method: "POST",
         body: data,
       })
         .then((res) => res.json())
-        .then(({ image }) => {
+        .then(({ image, face_id }) => {
           console.log((+new Date() - startRef.current) / 1e3);
           setResult(image);
+          setFaceID(face_id);
         });
     },
-    [image]
+    [faceID, faceRects, image, sex]
   );
 
   useEffect(() => {
@@ -91,7 +94,7 @@ function App() {
           canvasRef.current.height
         );
       canvasRef.current.toBlob(onSelect, "image/png");
-    }, 500);
+    }, 300);
   };
 
   const clear = (e) => {
@@ -158,6 +161,18 @@ function App() {
           <Form onSubmit={onToggleCamera}>
             <Button className="mt-2" size="sm" type="submit" variant="success">
               Use Camera
+            </Button>
+          </Form>
+        )}
+        {faceID && (
+          <Form onSubmit={() => setFaceID(null)}>
+            <Button
+              className="mt-2"
+              size="sm"
+              type="submit"
+              variant="secondary"
+            >
+              Change Face
             </Button>
           </Form>
         )}
