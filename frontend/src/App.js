@@ -37,6 +37,7 @@ function App() {
       .then(({ image, faces, sex }) => {
         console.log((+new Date() - startRef.current) / 1e3);
         console.log(faces);
+        console.log(sex)
         setSex(sex);
         setImage(image);
         setFaceRects(faces);
