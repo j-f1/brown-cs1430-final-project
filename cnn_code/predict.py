@@ -1,5 +1,6 @@
 import os
 import tensorflow as tf
+import cv2 as cv
 from PIL import Image
 import numpy as np
 import json
@@ -204,7 +205,7 @@ except:
         json.dump({"mean": mean.tolist(), "std": std.tolist()}, f)
 
 
-def predict_image(image):
+def predict_image(detected_face):
     """Predict sex classificartion for image.
 
     Arguments: Numpy arrray representing image
@@ -212,34 +213,19 @@ def predict_image(image):
     Returns: String representing sex classification
     """
 
-    img = np.resize(image, (hp.img_size, hp.img_size))
-    img = np.array(img, dtype=np.float32)
-    img /= 255.0
-    print("IMAGE SHAPE", img.shape)
-
-    # Grayscale -> RGB
-    if len(img.shape) == 2:
-        img = np.stack([img, img, img], axis=-1)
-
-    data_sample = np.zeros((1, hp.img_size, hp.img_size, 3))
-    data_sample[0] = img
-
-    img = data_sample[0]
-    img = (img - mean) / std
-    data_sample[0] = img
-
-    # print("data_sample", img)
-
-    predictions = model.predict(data_sample, verbose=1)
-    print(predictions)
-    sex = np.argmax(predictions, axis=1)
-    print(sex)
-    if sex[0] == 0:
+    gender_model = cv.dnn.readNetFromCaffe("gender.prototxt", "gender.caffemodel")
+    detected_face = cv.resize(detected_face, (224, 224))
+    detected_face_blob = cv.dnn.blobFromImage(detected_face)
+    
+    gender_model.setInput(detected_face_blob)
+    gender_result = gender_model.forward()
+    
+    if np.argmax(gender_result[0]) == 0:
         return "female"
     else:
         return "male"
 
 
 # predict()
-# img = Image.open("../ai_faces/099005.png")
+# img = cv.imread("../ai_faces/099050.png")
 # predict_image(img)
