@@ -117,5 +117,5 @@ def swap_faces():
         },
         response.stream,
     )
-    print("done")
+    print("done swapping")
     return response
