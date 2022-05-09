@@ -41,7 +41,6 @@ Download the gender.caffemodel in the link below and place in cnn_code directory
 - https://pysource.com/2019/05/28/face-swapping-explained-in-8-steps-opencv-with-python/
 - https://pypi.org/project/dlib/
 - https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html
-- https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/static/gender.caffemodel
 
 ## Datasets
 
