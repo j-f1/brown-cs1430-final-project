@@ -256,15 +256,15 @@ Look at all the fun images!
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\linewidth]{Screen Shot 2022-05-09 at 4.06.05 PM.png}
-    \caption{Jennifer Lawrence}
+    \includegraphics[width=\linewidth]{epoch_loss.png}
+    \caption{Loss over time while training our CNN model for gender classification}
     \label{fig:result1}
 \end{figure}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\linewidth]{Screen Shot 2022-05-09 at 4.06.05 PM.png}
-    \caption{Jennifer Lawrence}
+    \includegraphics[width=\linewidth]{epoch_accuracy.png}
+    \caption{Accuracy over time while training our CNN model for gender classification. Our model achieved a high of 94.5\% testing accuracy during the 10 training epochs.}
     \label{fig:result1}
 \end{figure}
 
@@ -295,6 +295,10 @@ attempted to classify single images from the randomly generated faces dataset, w
 was making predictions based on other parts of the image. However, we were still unable to figure out why our model was predicting gender incorrectly for single images
 even after taking these steps. Therefore, we used an online tutorial and pretrained weights for predicting gender in order to accurately classify
 uploaded images on the frontend.
+
+It is also important to note that for our project, we used gender classification based on only two genders (male and female). We recognize that gender classification is problematic,
+as many people do not identify as the gender someone might classify them as or identify as non-binary. Predicting gender allowed us to choose a better face to anonymize uploaded images
+with. With more time, we would choose the best image based on matching indidividual facial features.
 
 %-------------------------------------------------------------------------
 \subsection{Societal Discussion}
@@ -379,7 +383,7 @@ protestors while still showing a face.
 \begin{description}
 \item[Andrés] I worked on training a CNN model, based on the Homework 5 code, to classify the gender of a person's face included in an image. I then wrote code to run this model on our database of randomly generated faces to classify each image as male or female. Finally, I followed a tutorial online to classify single images as male or female, as my model was not predicting the gender of single images correctly. I also did some work implementing the front end.
 \item[Claire] I worked on the code to swap faces using python dlib and open cv by following a tutorial from pysource. This code uses a preexisting model to detect the feature points of the face, divide the face into triangles, and replace the triangles of the second face with the triangles of the first.
-\item [Jed] I built the algorithm that attempts to detect whether the subject is similing. I also did most of the work for setting up the frontend and the backend server.
+\item [Jed] I built the algorithm that attempts to detect whether the subject is similing. I also did most of the work for setting up the frontend and the backend server, including piping data over HTTP and integrating with the Web camera capture API.
 \end{description}
 
 \end{document}
