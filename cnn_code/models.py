@@ -9,8 +9,8 @@ import tensorflow as tf
 from tensorflow.keras.layers import \
     Conv2D, MaxPool2D, Dropout, Flatten, Dense
 
-from .import hyperparameters as hp
-# import hyperparameters as hp
+# from .import hyperparameters as hp
+import hyperparameters as hp
 
 
 class YourModel(tf.keras.Model):
