@@ -1,3 +1,32 @@
+## Setup
+
+Make sure to have Python 3.9 and Node.js 18.0.0 installed
+
+```shellsession
+$ python3.9 -m venv venv
+$ . venv/bin/activate
+$ pip install -r requirements.txt
+$ cd cnn_code
+$ pip install -r requirements.txt
+$ wget https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/static/gender.caffemodel
+$ cd ..
+```
+
+Then, in one terminal:
+
+```shellsession
+$ cd server
+$ flask run
+```
+
+…and in another:
+
+```shellsession
+$ cd frontend
+$ npm install
+$ npm start
+```
+
 ## Web UI
 
 1. In one terminal, run `flask run` in the `server/` folder
