@@ -50,10 +50,10 @@ def select_image():
     image = request.files["image"]
     data = image.read()
     img = np.array(Image.open(image).convert("RGB"))
-    sex = predict_image(img)
 
     # face-detect
     faces, heuristics = are_there_teeth(img, annotate=False)
+    sex = predict_image(img)
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
     json.dump(
