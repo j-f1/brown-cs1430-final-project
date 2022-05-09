@@ -28,7 +28,7 @@ function App() {
   const onSelect = useCallback((blob) => {
     startRef.current = +new Date();
     const data = new FormData(formRef.current || undefined);
-    if (blob) data.set("image", blob, "blob");
+    if (blob instanceof Blob) data.set("image", blob, "blob");
     fetch(SERVER + "/select-image", {
       method: "POST",
       body: data,
