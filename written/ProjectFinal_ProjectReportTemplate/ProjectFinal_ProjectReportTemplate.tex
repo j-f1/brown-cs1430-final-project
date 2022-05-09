@@ -111,7 +111,7 @@ Our proposed system attempts to retain much of the detailed expressiveness of th
 
 % Cite and discuss work that you used in your project, including any software used. Citations are written into a .bib file in BibTeX format, and can be called like this: Alpher et al.~\cite{Karras2019stylegan2}. Here's a brief intro: \href{http://www.andy-roberts.net/writing/latex/bibliographies}{webpage}. \emph{Hint:} \$$>$ pdflatex \%docu, bibtex \%docu, pdflatex \%docu, pdflatex \%docu
 
-Our AI-generated faces were extracted from StwyleGAN~2~\cite{Karras2019stylegan2}, with no curation on our end besides selecting an arbitrary subset of the images due to the amount of training time required. Additionally, we referenced online tutorials \cite{serengil_2021} to aid in developing features, and used a pretrained model from dlib~\cite{guoquanhao_2019} to detect facial features.
+Our AI-generated faces were extracted from StwyleGAN~2~\cite{Karras2019stylegan2}, with no curation on our end besides selecting an arbitrary subset of the images due to the amount of training time required. Additionally, we referenced online tutorials \cite{serengil_2021}\cite{there_2019} to aid in developing features, and used a pretrained model from dlib~\cite{guoquanhao_2019} to detect facial features.
 
 \section{Method}
 
@@ -164,7 +164,18 @@ the accuracy and loss of our model, we viewed the results of training on Tensorb
 each image in our randomly generated faces dataset, we developed a short script to predict each image using the model and
 store the results in a JSON file.
 
+In order to predict the gender of single images, we followed a tutorial (included in the bibliography) for gender classification using pretrained weights.
+We built a function to run this algorithm every time a user selects a new image on the frontend.
+
+Teeth detection was carried out by computing the area of a triangle composed of three feature points around the mouth. A larger triangle area indicates that the person is smiling or has their mouth open. Initially, we used a threshold area to differentiate between ``smiling'' and ``not smiling'' states (this is what the green/red rectangle in the web version indicates). However, we decided to switch to looking for faces with similar triangle-area scores, ensuring that an incorrect estimation of the area threshold wouldn't impair the effectiveness of the algorithm.
+
+We pre-calculated the tooth triangle-area score for all of our candidate replacement faces and cached it in the same JSON file as the result of the gender classification model.
+
+When finding a face to anonymize an uploaded image on the frontend, we predicted the gender of the face and computed the tooth triangle area score. Then, we searched for a face in our randomly generated faces dataset that had the same gender and a similar tooth score and swapped it with the face in the uploaded image.
+
 \section{Results}
+
+Look at all the fun images!
 
 % Present the results of the changes. Include code snippets (just interesting things), figures (Figures \ref{fig:result1} and \ref{fig:result2}), and tables (Table \ref{tab:example}). Assess computational performance, accuracy performance, etc. Further, feel free to show screenshots, images; videos will have to be uploaded separately to Gradescope in a zip. Use whatever you need.
 
@@ -261,6 +272,15 @@ Another decision made was the choice to use cv2's normal seamless clone as oppos
 blends the skin tone and facial features more than the normal clone which is helpful in making the face look more realstic
 however we ultimately decided that the faces created using mixed clone were too similar to the original face, so normal
 clone was the best option.
+
+In terms of the CNN model for predicting gender, we were unable to determine why the model was innaccurate for predicting single images. While
+the model accurately predicted gender for the training dataset, as shown in the result section, and for the randomly generated faces dataset,
+it consistently predicted images as being female regardless of which image was uploaded. We attempted to debug this issue by using the same standardization
+method for predicting single images that we used for predicting the entire dataset by computing the mean and standard deviation of the training dataset. We also
+attempted to classify single images from the randomly generated faces dataset, which included only the face in the image, to rule out the possibility that the model
+was making predictions based on other parts of the image. However, we were still unable to figure out why our model was predicting gender incorrectly for single images
+even after taking these steps. Therefore, we used an online tutorial and pretrained weights for predicting gender in order to accurately classify
+uploaded images on the frontend.
 
 %-------------------------------------------------------------------------
 \subsection{Societal Discussion}
