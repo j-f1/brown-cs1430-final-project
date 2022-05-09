@@ -3,12 +3,12 @@
  % CSCI 1430 Final Project Report Template
  %
  % This is a LaTeX document. LaTeX is a markup language for producing documents.
- % Your task is to answer the questions by filling out this document, then to 
- % compile this into a PDF document. 
- % You will then upload this PDF to `Gradescope' - the grading system that we will use. 
+ % Your task is to answer the questions by filling out this document, then to
+ % compile this into a PDF document.
+ % You will then upload this PDF to `Gradescope' - the grading system that we will use.
  % Instructions for upload will follow soon.
  %
- % 
+ %
  % TO COMPILE:
  % > pdflatex thisfile.tex
  %
@@ -25,7 +25,7 @@
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  %
  % How to include two graphics on the same line:
- % 
+ %
  % \includegraphics[width=0.49\linewidth]{yourgraphic1.png}
  % \includegraphics[width=0.49\linewidth]{yourgraphic2.png}
  %
@@ -34,11 +34,11 @@
  % \begin{equation}
  % y = mx+c
  % \end{equation}
- % 
+ %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 
+
  \documentclass[10pt,twocolumn,letterpaper]{article}
- 
+
 \usepackage{cvpr}
 \usepackage{times}
 \usepackage{epsfig}
@@ -67,131 +67,214 @@
 \begin{document}
 
 %%%%%%%%% TITLE
-\title{CSCI 1430 Final Project Report:\\Your project title}
+\title{CSCI 1430 Final Project Report:\\Horrifying Real-Time Face Replacement Using ``AI''}
 
-\author{\emph{Team name}: Andrés Beck-Ruiz, Claire Oberg, Jed Fox.\\
+\author{\emph{Shallow Faces}: Andrés Beck-Ruiz, Claire Oberg, Jed Fox.\\
 Brown University\\
 }
 
 \maketitle
-%\thispagestyle{empty}
+% \thispagestyle{empty}
 
 %%%%%%%%% ABSTRACT
 \begin{abstract}
-This document is a template for your final project reports, presented in a conference-paper style. It is sightly-more complicated LaTeX, but not much more complex than the earlier project reports. 
-This document, along with your code, any supplemental material, and your 2-minute presentation, are qualitatively what determines your grade. 
 
+    We created a tool for anonymizing faces in images by replacing them with faces selected from a set of AI-generated faces (from the StyleGAN 2 paper). The results were often deeply unpleasant.
 
+% This document is a template for your final project reports, presented in a conference-paper style. It is sightly-more complicated LaTeX, but not much more complex than the earlier project reports.
+% This document, along with your code, any supplemental material, and your 2-minute presentation, are qualitatively what determines your grade.
 \end{abstract}
 
 
-\section{Proposal Notes}
+% \section{Proposal Notes}
 
-\begin{enumerate}
-    \item Overriding principle: show us your effort.
-    \item If you wish us to consider any aspect of your project, it should be presented here. \item Please include a problem statement, related work, your method, your results (figures! tables!), any comparison to existing techniques, and references. 
-    \item If you made something work - great! If you didn't quite make it work - tell us about the problems, why you think it didn't work, and what you would do to fix it.
-    \item Length: Approximately four pages for techical description and one page for societal implications.
-    \item Please include an appendix to the report which details what each team member contributed to the project. One paragraph max each.
-    \item Any other materials should go in an appendix.
-\end{enumerate}
+% \begin{enumerate}
+%     \item Overriding principle: show us your effort.
+%     \item If you wish us to consider any aspect of your project, it should be presented here. \item Please include a problem statement, related work, your method, your results (figures! tables!), any comparison to existing techniques, and references.
+%     \item If you made something work - great! If you didn't quite make it work - tell us about the problems, why you think it didn't work, and what you would do to fix it.
+%     \item Length: Approximately four pages for techical description and one page for societal implications.
+%     \item Please include an appendix to the report which details what each team member contributed to the project. One paragraph max each.
+%     \item Any other materials should go in an appendix.
+% \end{enumerate}
 
 
 %%%%%%%%% BODY TEXT
 \section{Introduction}
 
-Introduce the problem that you are trying to solve. Why is it difficult? Briefly what approach will you take? What difference would it make if it were solved?
+% Introduce the problem that you are trying to solve. Why is it difficult? Briefly what approach will you take? What difference would  make if it were solved?
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+We wanted to be able to effectively anonymize images of people -- either alone or in groups. Currently, journalists and apps like Signal provide some level of anonymization, but it comes at a great cost: current state-of-the-art approaches simply replace all or part of the face with a black rectangle or oval, or blur it beyond recognizability. These solutions all remove the human connection from the image — you can see body language, but all the expresiveness of the face is lost.
+
+Our proposed system attempts to retain much of the detailed expressiveness of the human face, by replacing the subject's identifiable face with one from a dataset of AI-generated ones. We believe that this will preserve facial posture while effectively hiding detailes like the exact appearance of facial features that make someone uniquely identifiable.
 
 \section{Related Work}
 
-Cite and discuss work that you used in your project, including any software used. Citations are written into a .bib file in BibTeX format, and can be called like this: Alpher et al.~\cite{Alpher04}. Here's a brief intro: \href{http://www.andy-roberts.net/writing/latex/bibliographies}{webpage}. \emph{Hint:} \$$>$ pdflatex \%docu, bibtex \%docu, pdflatex \%docu, pdflatex \%docu
+% Cite and discuss work that you used in your project, including any software used. Citations are written into a .bib file in BibTeX format, and can be called like this: Alpher et al.~\cite{Karras2019stylegan2}. Here's a brief intro: \href{http://www.andy-roberts.net/writing/latex/bibliographies}{webpage}. \emph{Hint:} \$$>$ pdflatex \%docu, bibtex \%docu, pdflatex \%docu, pdflatex \%docu
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Watch for hanging orphans; they make a document look ugly.
+Our AI-generated faces were extracted from StwyleGAN~2~\cite{Karras2019stylegan2}, with no curation on our end besides selecting an arbitrary subset of the images due to the amount of training time required. Additionally, we referenced online tutorials \cite{serengil_2021} to aid in developing features, and used a pretrained model from dlib~\cite{guoquanhao_2019} to detect facial features.
 
 \section{Method}
 
-Describe the problem in a compact way. What was your approach to solving it? Include diagrams to help understanding. For instance, if you used a CNN, what was the architecture? Include equations as necessary, e.g., Pythagoras' theorem (Eq.~\ref{eq:example}):
-\begin{equation}
-x^2 + y^2 = z^2,
-\label{eq:example}
-\end{equation}
-where $x$ is the the `adjacent edge' of a right-angled triangle, $y$ is the `opposite edge' of a right-angled triangle, and $z$ is the hypotenuse.
+% Describe the problem in a compact way. What was your approach to solving it? Include diagrams to help understanding. For instance, if you used a CNN, what was the architecture? Include equations as necessary, e.g., Pythagoras' theorem (Eq.~\ref{eq:example}):
+% \begin{equation}
+% x^2 + y^2 = z^2,
+% \label{eq:example}
+% \end{equation}
+% where $x$ is the the `adjacent edge' of a right-angled triangle, $y$ is the `opposite edge' of a right-angled triangle, and $z$ is the hypotenuse.
 
-My code snippet highlights an interesting point.
-\begin{lstlisting}[style=Matlab-editor]
-one = 1;
-two = one + one;
-if two != 2
-    disp( 'This computer is broken.' );
-end
-\end{lstlisting}
+% My code snippet highlights an interesting point.
+% \begin{lstlisting}[style=Matlab-editor]
+% one = 1;
+% two = one + one;
+% if two != 2
+%     disp( 'This computer is broken.' );
+% end
+% \end{lstlisting}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+We built several interlinked components:
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\begin{itemize}
+    \item \verb|cnn_code| uses a neural network to guess the gender of a face in an image.
+    \item \verb|faceswap| replaces a face at a provided location in the image with another provided face.
+    \item \verb|frontend| is a React-based UI that allows uploading images and processing a camera feed live.
+    \item \verb|server| is a Flask-based server that combines \verb|cnn_code|, \verb|faceswap|, and \verb|teeth| to implement the CV-based functionality of the frontend.
+    \item \verb|teeth| analyzes faces using the 68-face-landmarks model, and detects whether the face’s teeth are visible or not.
+\end{itemize}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+For the CNN model, the architecture used is as follows: four sets of two convolutional layers followed by a max pool layer
+\begin{itemize}
+    \item Two convolutional layers with 64 filters,
+    \item
+
+\end{itemize}
 
 \section{Results}
 
-Present the results of the changes. Include code snippets (just interesting things), figures (Figures \ref{fig:result1} and \ref{fig:result2}), and tables (Table \ref{tab:example}). Assess computational performance, accuracy performance, etc. Further, feel free to show screenshots, images; videos will have to be uploaded separately to Gradescope in a zip. Use whatever you need.
+% Present the results of the changes. Include code snippets (just interesting things), figures (Figures \ref{fig:result1} and \ref{fig:result2}), and tables (Table \ref{tab:example}). Assess computational performance, accuracy performance, etc. Further, feel free to show screenshots, images; videos will have to be uploaded separately to Gradescope in a zip. Use whatever you need.
 
-\begin{table}
-\begin{center}
-\begin{tabular}{ l c }
-\toprule
-Method & Frobnability \\
-\midrule
-Theirs & Frumpy \\
-Yours & Frobbly \\
-Ours & Makes one's heart Frob\\
-\bottomrule
-\end{tabular}
-\end{center}
-\caption{Results. Please write an explanatory caption that makes the table/figure self-contained.}
-\label{tab:example}
-\end{table}
+% \begin{table}
+% \begin{center}
+% \begin{tabular}{ l c }
+% \toprule
+% Method & Frobnability \\
+% \midrule
+% Theirs & Frumpy \\
+% Yours & Frobbly \\
+% Ours & Makes one's heart Frob\\
+% \bottomrule
+% \end{tabular}
+% \end{center}
+% \caption{Results. Please write an explanatory caption that makes the table/figure self-contained.}
+% \label{tab:example}
+% \end{table}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+% \begin{figure}[t]
+%     \centering
+%     \includegraphics[width=\linewidth]{placeholder.jpg}
+%     \caption{Single-wide figure.}
+%     \label{fig:result1}
+% \end{figure}
+
+
+% \begin{figure*}[t]
+%     \centering
+%     \includegraphics[width=0.4\linewidth]{placeholder.jpg}
+%     \includegraphics[width=0.4\linewidth]{placeholder.jpg}
+%     \caption{Double-wide figure. \emph{Left:} My result was spectacular. \emph{Right:} Curious.}
+%     \label{fig:result2}
+% \end{figure*}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\linewidth]{placeholder.jpg}
-    \caption{Single-wide figure.}
+    \includegraphics[width=\linewidth]{Screen Shot 2022-05-09 at 4.06.05 PM.png}
     \label{fig:result1}
 \end{figure}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=0.4\linewidth]{placeholder.jpg}
-    \includegraphics[width=0.4\linewidth]{placeholder.jpg}
-    \caption{Double-wide figure. \emph{Left:} My result was spectacular. \emph{Right:} Curious.}
-    \label{fig:result2}
-\end{figure*}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 %-------------------------------------------------------------------------
 \subsection{Technical Discussion}
 
-What about your method raises interesting questions? Are there any trade-offs? What is the right way to think about the changes that you made?
+% What about your method raises interesting questions? Are there any trade-offs? What is the right way to think about the changes that you made?
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+There were a few technical decisions made regarding the face swapping aspect of the code.
+The first was the decision to use python dlib's get frontal face detector. This detector uses HOG + Linear SVM
+to detect the features of the face. The alternative was to use a CNN to identify the faces which would do a better
+job of identifying faces at angles or in different lightings, however, it is significantly slower than the dlib detector.
 
+Another decision made was to use a preexisting shape predictor to identify the 68 landmarks on the face, the alternative options
+considered were to train our own model or use a model with a different number of landmarks. This model worked incredibly well, so
+we decided to move forward with using this one in the implementation.
+
+Another decision made was the choice to use cv2's normal seamless clone as opposed to the mixed clone option. The mixed clone option
+blends the skin tone and facial features more than the normal clone which is helpful in making the face look more realstic
+however we ultimately decided that the faces created using mixed clone were too similar to the original face, so normal
+clone was the best option.i
 
 %-------------------------------------------------------------------------
 \subsection{Societal Discussion}
 
-You will be asked to respond to a list of potential ethical concerns with your project. You will receive an email from the TAs with your group's list shortly after final project progress reports are due.
+\begin{enumerate}
+    \item \textbf{Critique:} \textit{In response to the project’s main goal of aiding protesters, this could actually
+    undermine the credibility of protesters and public influencers who apply this
+    software; wearing someone else’s face (or synthetic face) takes away the liability
+    one has when saying something wrong, which could undermine their credibility.
+    People might connect less with someone knowing that the face isn’t real, even if
+    the alternative is not having a face to show.}
 
-%------------------------------------------------------------------------
+    \textbf{Response:} While these are valid concerns, we believe that the benefit of allowing protestors to anonymize themselves
+    to avoid backlash outweighs the possibility of an audience connecting less with the protestor or undermining their credibility. Additionally, it's already possible to record a video where your face is out of frame (like CGP Grey does) or record an audio track over a free stock video, and both of these methods allow for similar anonymity to our method.
+
+    \item \textbf{Critique:} \textit{This project also contributes to development of deep-fake technology and its implication: spreading misinformation
+    and misrepresentation, which could bring harm to people’s reputation and could incite conflicts (for example, when political statements are faked by public figure lookalikes exploiting Shallow Faces’ algorithm).}
+
+    \textbf{Response:} We felt that despite the existence of tools which perform much more seamless face swapping than we were hoping to achieve, very little misinformation acutally uses such techniques. Since people aren't heavily using these existing tools for misinformation, we doubt that our method would be used in this way.
+    For example, despite many, many photographs of Joe Biden being publicly available as training data, the closest we've seen in terms of viral manipulated media of him was a video where he was simply slowed down — a technique that's been available to just about anyone for years.
+
+    \item \textbf{Critique:} \textit{Furthermore, it is important to have a diverse set of faces from across races to
+    achieve the team’s goal of accurate representation. Even humans suffer from the cross-race effect as a result of not being exposed adequately to people of other
+    races. With how much more rigid the training for AIs can be, it is very important
+    to have a diverse dataset in order to prevent the tool from working better on certain
+    kinds of faces.}
+
+    \textbf{Response:} We have ensured that our dataset used to train our CNN model for predicting gender contains a diverse set of faces
+    in terms of age and race. Furthermore, our dataset of AI generated faces contains a variety of ages, genders, and races, given
+    that it is randomly generated. While there are probably axes of diversity that we have not considered, adding additional diversity to the set of replacement images (or the training set for models we’re using) is the sort of thing that will be relatively easy to change in the future as more concrete concerns are raised.
+    \item \textbf{Critique:} \textit{One of the team member’s roles has a listed task of “gender estimation”. This is a
+    rather problematic way to go about this task, as estimating gender is a loaded task.
+    Even humans evaluating a person face-to-face can’t always accurately identify
+    someone’s gender, and there are plenty of people who don’t identify with a given
+    gender and/or have androgynous looks. It might be better to try and match the faces
+    purely based on how they look, instead of by sorting them into gender categories
+    in order to find matching faces.}
+
+    \textbf{Response:} This is a valid concern; however, we are estimating gender as a starting point for narrowing down the list of candidate faces we can use
+    for our anonymization algorithm, and we do not publicly display the results of this estimation. We recognize that there are many gender identies and expressions and that not everyone might identify
+    with the (binary) gender we classify them as. With more time we would like to replace our gender estimation algorithm with a carefully-considered set of facial characteristics that would make users comfortable with the artifical face they are given without revealing enough information to identify them.
+
+    \item \textbf{Critique:} \textit{Applying technology to protesters could even endanger those whose face resemble
+    the replacement faces. For one, replacing mass protester faces might protect the
+    protesters at the expense of lookalikes. For another, if a social media influencer
+    discusses politically charged topics on platform in countries with less freedom of
+    speech, and the protester chooses not to declare that they are using face replacement
+    technology, they might put lookalikes in danger.}
+
+    \textbf{Response:} In order to protect any lookalikes of the randomly generated faces, we could include a watermark in any editied images. This would declare to anyone viewing the image
+    that the faces in the images are not real people.
+\end{enumerate}
+
+
+
+
+%-----------------------------------------------------------------------
 \section{Conclusion}
 
 What you did, why it matters, what the impact is going forward.
+
+%------------------------------------------------------------------------
+% \section{Future Work}
+
+% Going forward, this algorithm could be improved by building
 
 {\small
 \bibliographystyle{plain}
@@ -202,12 +285,11 @@ What you did, why it matters, what the impact is going forward.
 
 \subsection*{Team contributions}
 
-Please describe in one paragraph per team member what each of you contributed to the project.
+% Please describe in one paragraph per team member what each of you contributed to the project.
 \begin{description}
-\item[Person 1] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-\item[Person 2] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-\item [Person 3] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-\item [Person 4] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+\item[Andrés] I worked on training a CNN model, based on the Homework 5 code, to classify the gender of a person's face included in an image. I then wrote code to run this model on our database of randomly generated faces to classify each image as male or female. Finally, I followed a tutorial online to classify single images as male or female, as my model was not predicting the gender of single images correctly. I also did some work implementing the front end.
+\item[Claire] I worked on the code to swap faces using python dlib and open cv. This code uses a preexisting model to detect the feature points of the face, divide the face into triangles, and replace the triangles of the second face with the triangles of the first.
+\item [Jed] I built the algorithm that attempts to detect whether the subject is similing. I also did most of the work for setting up the frontend and the backend server.
 \end{description}
 
 \end{document}
