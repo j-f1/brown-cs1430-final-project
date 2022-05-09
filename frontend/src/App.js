@@ -15,6 +15,7 @@ function App() {
   const [faceRects, setFaceRects] = useState(null);
   const [sex, setSex] = useState(null);
   const [faceID, setFaceID] = useState(null);
+  const oldFaceIDRef = useRef(null);
 
   /** @type {React.MutableRefObject<HTMLFormElement>} */
   const formRef = useRef();
@@ -65,7 +66,9 @@ function App() {
         .then(({ image, face_id }) => {
           console.log((+new Date() - startRef.current) / 1e3);
           setResult(image);
-          setFaceID((old) => old || face_id);
+          if (face_id !== oldFaceIDRef.current) {
+            setFaceID((old) => old || face_id);
+          }
         });
     },
     [faceID, faceRects, image, sex]
@@ -166,7 +169,12 @@ function App() {
           </Form>
         )}
         {faceID && (
-          <Form onSubmit={() => setFaceID(null)}>
+          <Form
+            onSubmit={() => {
+              oldFaceIDRef.current = faceID;
+              setFaceID(null);
+            }}
+          >
             <Button
               className="mt-2"
               size="sm"
