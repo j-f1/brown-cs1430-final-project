@@ -212,8 +212,14 @@ def predict_image(detected_face):
 
     Returns: String representing sex classification
     """
-
-    gender_model = cv.dnn.readNetFromCaffe("gender.prototxt", "gender.caffemodel")
+    gender_model = cv.dnn.readNetFromCaffe(os.path.join(
+            os.path.dirname(__file__),
+            "gender.prototxt",
+        ), os.path.join(
+            os.path.dirname(__file__),
+            "gender.caffemodel",
+        ))
+    
     detected_face = cv.resize(detected_face, (224, 224))
     detected_face_blob = cv.dnn.blobFromImage(detected_face)
     
@@ -227,5 +233,3 @@ def predict_image(detected_face):
 
 
 # predict()
-# img = cv.imread("../ai_faces/099050.png")
-# predict_image(img)

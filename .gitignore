@@ -6,6 +6,7 @@
 *.log
 *.pyc
 .DS_Store
+*.caffemodel
 
 venv
 .vscode
