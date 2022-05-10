@@ -173,6 +173,8 @@ We pre-calculated the tooth triangle-area score for all of our candidate replace
 
 When finding a face to anonymize an uploaded image on the frontend, we predicted the gender of the face and computed the tooth triangle area score. Then, we searched for a face in our randomly generated faces dataset that had the same gender and a similar tooth score and swapped it with the face in the uploaded image.
 
+In order to swap faces we followed a tutorial that explained key steps for swapping faces. We first used python's dlib face detector to detect the face and then used a model to identify the 68 key feature points of the face. We then calculated the Delauney trianglulation between the points which gave us a number of triangles between each point. The triangles were then stretched to fit the corresponding triangle on the other face and each triangle was replaced. This resulted in the new (ai generated) anonymous face on the existing head.
+
 \section{Results}
 
 Look at all the fun images!
@@ -361,7 +363,7 @@ with. With more time, we would choose the best image based on matching indidivid
 We implemented an algorithm to anonymize the faces in a photo by replacing the original face with an ai-generated face.
 We also created a website to interact with this tool. On this website photos can be uploaded and anonomyized and there
 is also an option to anonymize a live video feed. This could be used to protect the identity of
-protestors while still showing a face, allowing viewers to better identify with the protestors. 
+protestors while still showing a face, allowing viewers to better identify with the protestors.
 
 %------------------------------------------------------------------------
 {\small
