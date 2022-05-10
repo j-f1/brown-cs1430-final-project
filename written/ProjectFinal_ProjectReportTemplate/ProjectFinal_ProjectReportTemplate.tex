@@ -165,7 +165,7 @@ each image in our randomly generated faces dataset, we developed a short script 
 store the results in a JSON file.
 
 In order to predict the gender of single images, we followed a tutorial (included in the bibliography) for gender classification using pretrained weights.
-We built a function to run this algorithm every time a user selects a new image on the frontend.
+We built a function to run this algorithm every time a user selects a new image on the frontend. Both this function and the script to predict images in the randomly generated faces dataset are included in \verb|predict.py|.
 
 Teeth detection was carried out by computing the area of a triangle composed of three feature points around the mouth. A larger triangle area indicates that the person is smiling or has their mouth open. Initially, we used a threshold area to differentiate between ``smiling'' and ``not smiling'' states (this is what the green/red rectangle in the web version indicates). However, we decided to switch to looking for faces with similar triangle-area scores, ensuring that an incorrect estimation of the area threshold wouldn't impair the effectiveness of the algorithm.
 
@@ -278,13 +278,13 @@ The first was the decision to use python dlib's get frontal face detector. This 
 to detect the features of the face. The alternative was to use a CNN to identify the faces which would do a better
 job of identifying faces at angles or in different lightings, however, it is significantly slower than the dlib detector.
 
-Another decision made was to use a preexisting shape predictor to identify the 68 landmarks on the face, the alternative options
+Another decision made was to use a preexisting shape predictor to identify the 68 landmarks on the face; the alternative options
 considered were to train our own model or use a model with a different number of landmarks. This model worked incredibly well, so
 we decided to move forward with using this one in the implementation.
 
 Another decision made was the choice to use cv2's normal seamless clone as opposed to the mixed clone option. The mixed clone option
-blends the skin tone and facial features more than the normal clone which is helpful in making the face look more realstic
-however we ultimately decided that the faces created using mixed clone were too similar to the original face, so normal
+blends the skin tone and facial features more than the normal clone which is helpful in making the face look more realstic.
+However we ultimately decided that the faces created using mixed clone were too similar to the original face, so normal
 clone was the best option.
 
 In terms of the CNN model for predicting gender, we were unable to determine why the model was innaccurate for predicting single images. While
@@ -358,12 +358,10 @@ with. With more time, we would choose the best image based on matching indidivid
 %-----------------------------------------------------------------------
 \section{Conclusion}
 
-What you did, why it matters, what the impact is going forward.
-
 We implemented an algorithm to anonymize the faces in a photo by replacing the original face with an ai-generated face.
 We also created a website to interact with this tool. On this website photos can be uploaded and anonomyized and there
-is also an option to anonymize a live video feed. This could be used in a protest setting to protect the identity of
-protestors while still showing a face.
+is also an option to anonymize a live video feed. This could be used to protect the identity of
+protestors while still showing a face, allowing viewers to better identify with the protestors. 
 
 %------------------------------------------------------------------------
 {\small
@@ -377,7 +375,7 @@ protestors while still showing a face.
 
 % Please describe in one paragraph per team member what each of you contributed to the project.
 \begin{description}
-\item[Andrés] I worked on training a CNN model, based on the Homework 5 code, to classify the gender of a person's face included in an image. I then wrote code to run this model on our database of randomly generated faces to classify each image as male or female. Finally, I followed a tutorial online to classify single images as male or female, as my model was not predicting the gender of single images correctly. I also did some work implementing the front end.
+\item[Andrés] I worked on training a CNN model, based on the Homework 5 code, to classify the gender of a person's face included in an image. I then wrote a script to run this model on our database of randomly generated faces to classify each image as male or female. Finally, I followed a tutorial online to classify single images as male or female, as my model was not predicting the gender of single images correctly. I also did some work implementing the front end.
 \item[Claire] I worked on the code to swap faces using python dlib and open cv by following a tutorial from pysource. This code uses a preexisting model to detect the feature points of the face, divide the face into triangles, and replace the triangles of the second face with the triangles of the first.
 \item [Jed] I built the algorithm that attempts to detect whether the subject is similing. I also did most of the work for setting up the frontend and the backend server, including piping data over HTTP and integrating with the Web camera capture API.
 \end{description}
