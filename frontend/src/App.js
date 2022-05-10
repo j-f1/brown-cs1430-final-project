@@ -113,8 +113,10 @@ function App() {
         setFaceRects(null);
         setImage(null);
         setResult(null);
-      }, 400);
+      }, 450);
       setUsingCamera(null);
+      videoRef.current.srcObject = null;
+      videoRef.current.pause();
     }
   };
 
@@ -159,7 +161,7 @@ function App() {
             </div>
           </>
         ) : (
-          <Form ref={formRef}>
+          <Form ref={formRef} className="px-2 pt-2">
             <Form.Control
               name="image"
               type="file"
@@ -178,7 +180,8 @@ function App() {
           )}
           {image && (
             <Form
-              onSubmit={() => {
+              onSubmit={(e) => {
+                e.preventDefault();
                 oldFaceIDRef.current = faceID;
                 setFaceID(null);
               }}
