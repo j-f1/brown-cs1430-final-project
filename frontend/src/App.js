@@ -168,37 +168,44 @@ function App() {
             />
           </Form>
         )}
-        {!usingCamera && (
-          <Form onSubmit={onToggleCamera}>
-            <Button className="mt-2" size="sm" type="submit">
-              Use Camera
-            </Button>
-          </Form>
-        )}
-        {faceID && (
-          <Form
-            onSubmit={() => {
-              oldFaceIDRef.current = faceID;
-              setFaceID(null);
-            }}
-          >
-            <Button className="mt-2" size="sm" type="submit" variant="success">
-              Change Face
-            </Button>
-          </Form>
-        )}
-        {/* <Form onSubmit={onSwap}>
+        <div className="px-2">
+          {!usingCamera && (
+            <Form onSubmit={onToggleCamera}>
+              <Button className="mt-2" size="sm" type="submit">
+                Use Camera
+              </Button>
+            </Form>
+          )}
+          {image && (
+            <Form
+              onSubmit={() => {
+                oldFaceIDRef.current = faceID;
+                setFaceID(null);
+              }}
+            >
+              <Button
+                className="mt-2"
+                size="sm"
+                type="submit"
+                variant="success"
+              >
+                Change Face
+              </Button>
+            </Form>
+          )}
+          {/* <Form onSubmit={onSwap}>
           <Button className="mt-2" size="sm" type="submit">
             Swap Faces
           </Button>
         </Form> */}
-        {image && (
-          <Form onSubmit={clear}>
-            <Button className="mt-2" size="sm" type="submit" variant="danger">
-              {usingCamera ? "Stop Camera" : "Clear Image"}
-            </Button>
-          </Form>
-        )}
+          {image && (
+            <Form onSubmit={clear}>
+              <Button className="mt-2" size="sm" type="submit" variant="danger">
+                {usingCamera ? "Stop Camera" : "Clear Image"}
+              </Button>
+            </Form>
+          )}
+        </div>
       </Col>
       <Col md={6}>
         {result && (
