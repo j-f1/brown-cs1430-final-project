@@ -120,17 +120,15 @@ def swap_face(img_path1, img2, dest_face):
     lines_space_mask = np.zeros_like(bw_src_img)
     lines_space_new_face = np.zeros_like(dest_img)
 
-    # triangulation of both the faces
+    #triangles of both faces
     for triangle_index in indexes_triangles:
 
-        # triangulation of the first face
+        #source face triangulation
         tr1_pt1 = landmarks_points[triangle_index[0]]
         tr1_pt2 = landmarks_points[triangle_index[1]]
         tr1_pt3 = landmarks_points[triangle_index[2]]
         triangle1 = np.array([tr1_pt1, tr1_pt2, tr1_pt3], np.int32)
 
-        # rect1 = cv2.boundingRect(triangle1)
-        # (x, y, w, h) = rect1
         (x, y, w, h) = cv2.boundingRect(triangle1)
 
         cropped_triangle = src_img[y : y + h, x : x + w]
@@ -146,14 +144,12 @@ def swap_face(img_path1, img2, dest_face):
         )
 
         cv2.fillConvexPoly(cropped_tr1_mask, points, 255)
-
-        # Lines space
         cv2.line(lines_space_mask, tr1_pt1, tr1_pt2, 255)
         cv2.line(lines_space_mask, tr1_pt2, tr1_pt3, 255)
         cv2.line(lines_space_mask, tr1_pt1, tr1_pt3, 255)
         lines_space = cv2.bitwise_and(src_img, src_img, mask=lines_space_mask)
 
-        # Triangulation of second face
+        #destination face triangles 
         tr2_pt1 = landmarks_points2[triangle_index[0]]
         tr2_pt2 = landmarks_points2[triangle_index[1]]
         tr2_pt3 = landmarks_points2[triangle_index[2]]
@@ -174,16 +170,17 @@ def swap_face(img_path1, img2, dest_face):
 
         cv2.fillConvexPoly(cropped_tr2_mask, points2, 255)
 
-        # Warp triangles
         points = np.float32(points)
         points2 = np.float32(points2)
+
+        #warp the triangles of the source face to fit the destination face triangles size 
         M = cv2.getAffineTransform(points, points2)
         warped_triangle = cv2.warpAffine(cropped_triangle, M, (w, h))
         warped_triangle = cv2.bitwise_and(
             warped_triangle, warped_triangle, mask=cropped_tr2_mask
         )
 
-        # Reconstructing destination face
+        #recreate the destination face
         img2_new_face_rect_area = new_face[y : y + h, x : x + w]
         img2_new_face_rect_area_gray = cv2.cvtColor(
             img2_new_face_rect_area, cv2.COLOR_BGR2GRAY
@@ -200,7 +197,7 @@ def swap_face(img_path1, img2, dest_face):
         img2_new_face_rect_area = cv2.add(img2_new_face_rect_area, warped_triangle)
         new_face[y : y + h, x : x + w] = img2_new_face_rect_area
 
-    # Face swapped (putting 1st face into 2nd face)
+    #put the source face on the head of the destination image
     img2_face_mask = np.zeros_like(bw_dest_img)
     img2_head_mask = cv2.fillConvexPoly(img2_face_mask, convexhull2, 255)
     img2_face_mask = cv2.bitwise_not(img2_head_mask)
