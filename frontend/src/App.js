@@ -9,7 +9,7 @@ import { Button } from "react-bootstrap";
 const SERVER = "http://localhost.proxyman.io:5000";
 
 function App() {
-  const [usingCamera, setUsingCamera] = useState(false);
+  const [usingCamera, setUsingCamera] = useState(null);
   const [image, setImage] = useState(null);
   const [result, setResult] = useState(null);
   const [faceRects, setFaceRects] = useState(null);
@@ -80,14 +80,14 @@ function App() {
     }
   }, [onSwap, faceRects]);
 
-  const onToggleCamera = async () => {
-    setUsingCamera(true);
+  const onToggleCamera = async (e) => {
+    e.preventDefault();
     let stream = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: false,
     });
     videoRef.current.srcObject = stream;
-    setInterval(() => {
+    const token = setInterval(() => {
       canvasRef.current
         .getContext("2d")
         .drawImage(
@@ -99,6 +99,7 @@ function App() {
         );
       canvasRef.current.toBlob(onSelect, "image/png");
     }, 300);
+    setUsingCamera(token);
   };
 
   const clear = (e) => {
@@ -106,13 +107,22 @@ function App() {
     setFaceRects(null);
     setImage(null);
     setResult(null);
+    clearInterval(usingCamera);
+    if (usingCamera) {
+      setTimeout(() => {
+        setFaceRects(null);
+        setImage(null);
+        setResult(null);
+      }, 400);
+      setUsingCamera(null);
+    }
   };
 
   return (
     <Row>
-      <Col lg={1} />
-      <Col md={6} lg={5} className="p-4">
-        <h2>Image Input</h2>
+      {/* <Col lg={1} /> */}
+      <Col md={6}>
+        {/* <h2>Image Input</h2> */}
         {image ? (
           <>
             <div style={{ position: "relative" }}>
@@ -150,25 +160,17 @@ function App() {
           </>
         ) : (
           <Form ref={formRef}>
-            <Form.Group controlId="image-upload">
-              <Form.Label>Image</Form.Label>
-              <Form.Control
-                name="image"
-                type="file"
-                size="sm"
-                onChange={onSelect}
-              />
-            </Form.Group>
+            <Form.Control
+              name="image"
+              type="file"
+              size="sm"
+              onChange={onSelect}
+            />
           </Form>
         )}
         {!usingCamera && (
           <Form onSubmit={onToggleCamera}>
-            <Button
-              className="mt-2"
-              size="sm"
-              type="submit"
-              variant="secondary"
-            >
+            <Button className="mt-2" size="sm" type="submit">
               Use Camera
             </Button>
           </Form>
@@ -190,13 +192,15 @@ function App() {
             Swap Faces
           </Button>
         </Form> */}
-        <Form onSubmit={clear}>
-          <Button className="mt-2" size="sm" type="submit" variant="danger">
-            Clear Image
-          </Button>
-        </Form>
+        {image && (
+          <Form onSubmit={clear}>
+            <Button className="mt-2" size="sm" type="submit" variant="danger">
+              {usingCamera ? "Stop Camera" : "Clear Image"}
+            </Button>
+          </Form>
+        )}
       </Col>
-      <Col md={6} lg={5}>
+      <Col md={6}>
         {result && (
           <img
             src={"data:;base64," + result}
@@ -205,13 +209,14 @@ function App() {
           />
         )}
       </Col>
-      <Col lg={1} />
+      {/* <Col lg={1} /> */}
       <video width="320" height="240" autoPlay ref={videoRef} hidden></video>
       <canvas
         width="320"
         height="240"
         ref={canvasRef}
         style={{ width: 100 }}
+        hidden
       ></canvas>
     </Row>
   );
