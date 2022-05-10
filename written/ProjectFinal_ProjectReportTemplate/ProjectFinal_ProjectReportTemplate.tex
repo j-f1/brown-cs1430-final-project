@@ -173,7 +173,7 @@ We pre-calculated the tooth triangle-area score for all of our candidate replace
 
 When finding a face to anonymize an uploaded image on the frontend, we predicted the gender of the face and computed the tooth triangle area score. Then, we searched for a face in our randomly generated faces dataset that had the same gender and a similar tooth score and swapped it with the face in the uploaded image.
 
-In order to swap faces we followed a tutorial that explained key steps for swapping faces. We first used python's dlib face detector to detect the face and then used a model to identify the 68 key feature points of the face. We then calculated the Delauney triangulation between the points which gave us a number of triangles between each point. The triangles were then stretched to fit the corresponding triangle on the other face and each triangle was replaced. This resulted in the new (ai generated) anonymous face on the existing head.
+In order to swap faces we followed a tutorial \cite{there_2019} that explained key steps for swapping faces. We first used python's dlib face detector to detect the face and then used a model to identify the 68 key feature points of the face. We then calculated the Delauney triangulation between the points which gave us a number of triangles between each point. The triangles were then stretched to fit the corresponding triangle on the other face and each triangle was replaced. This resulted in the new (ai generated) anonymous face on the existing head.
 
 \section{Results}
 
@@ -378,7 +378,7 @@ protestors while still showing a face, allowing viewers to better identify with 
 % Please describe in one paragraph per team member what each of you contributed to the project.
 \begin{description}
 \item[Andrés] I worked on training a CNN model, based on the Homework 5 code, to classify the gender of a person's face included in an image. I then wrote a script to run this model on our database of randomly generated faces to classify each image as male or female. Finally, I followed a tutorial online to classify single images as male or female, as my model was not predicting the gender of single images correctly. I also did some work implementing the front end.
-\item[Claire] I worked on the code to swap faces using python dlib and open cv by following a tutorial from pysource. This code uses a preexisting model to detect the feature points of the face, divide the face into triangles, and replace the triangles of the second face with the triangles of the first.
+\item[Claire] I worked on the code to swap faces using python dlib and open cv by following a tutorial from pysource \cite{there_2019}. This code uses a preexisting model to detect the feature points of the face, divide the face into triangles, and replace the triangles of the second face with the triangles of the first.
 \item [Jed] I built the algorithm that attempts to detect whether the subject is smiling. I also did most of the work for setting up the frontend and the backend server, including piping data over HTTP and integrating with the Web camera capture API.
 \end{description}
 
