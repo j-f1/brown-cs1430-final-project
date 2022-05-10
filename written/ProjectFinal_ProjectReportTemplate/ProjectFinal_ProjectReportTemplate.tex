@@ -103,9 +103,9 @@ Brown University\\
 
 % Introduce the problem that you are trying to solve. Why is it difficult? Briefly what approach will you take? What difference would  make if it were solved?
 
-We wanted to be able to effectively anonymize images of people -- either alone or in groups. Currently, journalists and apps like Signal provide some level of anonymization, but it comes at a great cost: current state-of-the-art approaches simply replace all or part of the face with a black rectangle or oval, or blur it beyond recognizability. These solutions all remove the human connection from the image — you can see body language, but all the expresiveness of the face is lost.
+We wanted to be able to effectively anonymize images of people -- either alone or in groups. Currently, journalists and apps like Signal provide some level of anonymization, but it comes at a great cost: current state-of-the-art approaches simply replace all or part of the face with a black rectangle or oval, or blur it beyond recognizability. These solutions all remove the human connection from the image — you can see body language, but all the expressiveness of the face is lost.
 
-Our proposed system attempts to retain much of the detailed expressiveness of the human face, by replacing the subject's identifiable face with one from a dataset of AI-generated ones. We believe that this will preserve facial posture while effectively hiding detailes like the exact appearance of facial features that make someone uniquely identifiable.
+Our proposed system attempts to retain much of the detailed expressiveness of the human face, by replacing the subject's identifiable face with one from a dataset of AI-generated ones. We believe that this will preserve facial posture while effectively hiding details like the exact appearance of facial features that make someone uniquely identifiable.
 
 \section{Related Work}
 
@@ -164,7 +164,7 @@ the accuracy and loss of our model, we viewed the results of training on Tensorb
 each image in our randomly generated faces dataset, we developed a short script to predict each image using the model and
 store the results in a JSON file.
 
-In order to predict the gender of single images, we followed a tutorial (included in the bibliography) for gender classification using pretrained weights.
+In order to predict the gender of single images, we followed a tutorial (included in the bibliography) for gender classification using pre-trained weights.
 We built a function to run this algorithm every time a user selects a new image on the frontend. Both this function and the script to predict images in the randomly generated faces dataset are included in \verb|predict.py|.
 
 Teeth detection was carried out by computing the area of a triangle composed of three feature points around the mouth. A larger triangle area indicates that the person is smiling or has their mouth open. Initially, we used a threshold area to differentiate between ``smiling'' and ``not smiling'' states (this is what the green/red rectangle in the web version indicates). However, we decided to switch to looking for faces with similar triangle-area scores, ensuring that an incorrect estimation of the area threshold wouldn't impair the effectiveness of the algorithm.
@@ -173,7 +173,7 @@ We pre-calculated the tooth triangle-area score for all of our candidate replace
 
 When finding a face to anonymize an uploaded image on the frontend, we predicted the gender of the face and computed the tooth triangle area score. Then, we searched for a face in our randomly generated faces dataset that had the same gender and a similar tooth score and swapped it with the face in the uploaded image.
 
-In order to swap faces we followed a tutorial that explained key steps for swapping faces. We first used python's dlib face detector to detect the face and then used a model to identify the 68 key feature points of the face. We then calculated the Delauney trianglulation between the points which gave us a number of triangles between each point. The triangles were then stretched to fit the corresponding triangle on the other face and each triangle was replaced. This resulted in the new (ai generated) anonymous face on the existing head.
+In order to swap faces we followed a tutorial that explained key steps for swapping faces. We first used python's dlib face detector to detect the face and then used a model to identify the 68 key feature points of the face. We then calculated the Delauney triangulation between the points which gave us a number of triangles between each point. The triangles were then stretched to fit the corresponding triangle on the other face and each triangle was replaced. This resulted in the new (ai generated) anonymous face on the existing head.
 
 \section{Results}
 
@@ -285,22 +285,22 @@ considered were to train our own model or use a model with a different number of
 we decided to move forward with using this one in the implementation.
 
 Another decision made was the choice to use cv2's normal seamless clone as opposed to the mixed clone option. The mixed clone option
-blends the skin tone and facial features more than the normal clone which is helpful in making the face look more realstic.
+blends the skin tone and facial features more than the normal clone which is helpful in making the face look more realistic.
 However we ultimately decided that the faces created using mixed clone were too similar to the original face, so normal
 clone was the best option.
 
-In terms of the CNN model for predicting gender, we were unable to determine why the model was innaccurate for predicting single images. While
+In terms of the CNN model for predicting gender, we were unable to determine why the model was inaccurate for predicting single images. While
 the model accurately predicted gender for the training dataset, as shown in the result section, and for the randomly generated faces dataset,
 it consistently predicted images as being female regardless of which image was uploaded. We attempted to debug this issue by using the same standardization
 method for predicting single images that we used for predicting the entire dataset by computing the mean and standard deviation of the training dataset. We also
 attempted to classify single images from the randomly generated faces dataset, which included only the face in the image, to rule out the possibility that the model
 was making predictions based on other parts of the image. However, we were still unable to figure out why our model was predicting gender incorrectly for single images
-even after taking these steps. Therefore, we used an online tutorial and pretrained weights for predicting gender in order to accurately classify
+even after taking these steps. Therefore, we used an online tutorial and pre-trained weights for predicting gender in order to accurately classify
 uploaded images on the frontend.
 
 It is also important to note that for our project, we used gender classification based on only two genders (male and female). We recognize that gender classification is problematic,
 as many people do not identify as the gender someone might classify them as or identify as non-binary. Predicting gender allowed us to choose a better face to anonymize uploaded images
-with. With more time, we would choose the best image based on matching indidividual facial features.
+with. With more time, we would choose the best image based on matching individual facial features.
 
 %-------------------------------------------------------------------------
 \subsection{Societal Discussion}
@@ -319,7 +319,7 @@ with. With more time, we would choose the best image based on matching indidivid
     \item \textbf{Critique:} \textit{This project also contributes to development of deep-fake technology and its implication: spreading misinformation
     and misrepresentation, which could bring harm to people’s reputation and could incite conflicts (for example, when political statements are faked by public figure lookalikes exploiting Shallow Faces’ algorithm).}
 
-    \textbf{Response:} We felt that despite the existence of tools which perform much more seamless face swapping than we were hoping to achieve, very little misinformation acutally uses such techniques. Since people aren't heavily using these existing tools for misinformation, we doubt that our method would be used in this way.
+    \textbf{Response:} We felt that despite the existence of tools which perform much more seamless face swapping than we were hoping to achieve, very little misinformation actually uses such techniques. Since people aren't heavily using these existing tools for misinformation, we doubt that our method would be used in this way.
     For example, despite many, many photographs of Joe Biden being publicly available as training data, the closest we've seen in terms of viral manipulated media of him was a video where he was simply slowed down — a technique that's been available to just about anyone for years.
 
     \item \textbf{Critique:} \textit{Furthermore, it is important to have a diverse set of faces from across races to
@@ -340,7 +340,7 @@ with. With more time, we would choose the best image based on matching indidivid
     in order to find matching faces.}
 
     \textbf{Response:} This is a valid concern; however, we are estimating gender as a starting point for narrowing down the list of candidate faces we can use
-    for our anonymization algorithm, and we do not publicly display the results of this estimation. We recognize that there are many gender identies and expressions and that not everyone might identify
+    for our anonymization algorithm, and we do not publicly display the results of this estimation. We recognize that there are many gender identities and expressions and that not everyone might identify
     with the (binary) gender we classify them as. With more time we would like to replace our gender estimation algorithm with a carefully-considered set of facial characteristics that would make users comfortable with the artifical face they are given without revealing enough information to identify them.
 
     \item \textbf{Critique:} \textit{Applying technology to protesters could even endanger those whose face resemble
@@ -350,7 +350,7 @@ with. With more time, we would choose the best image based on matching indidivid
     speech, and the protester chooses not to declare that they are using face replacement
     technology, they might put lookalikes in danger.}
 
-    \textbf{Response:} In order to protect any lookalikes of the randomly generated faces, we could include a watermark in any editied images. This would declare to anyone viewing the image
+    \textbf{Response:} In order to protect any lookalikes of the randomly generated faces, we could include a watermark in any edited images. This would declare to anyone viewing the image
     that the faces in the images are not real people.
 \end{enumerate}
 
@@ -361,7 +361,7 @@ with. With more time, we would choose the best image based on matching indidivid
 \section{Conclusion}
 
 We implemented an algorithm to anonymize the faces in a photo by replacing the original face with an ai-generated face.
-We also created a website to interact with this tool. On this website photos can be uploaded and anonomyized and there
+We also created a website to interact with this tool. On this website photos can be uploaded and anonymized and there
 is also an option to anonymize a live video feed. This could be used to protect the identity of
 protestors while still showing a face, allowing viewers to better identify with the protestors.
 
@@ -379,7 +379,7 @@ protestors while still showing a face, allowing viewers to better identify with 
 \begin{description}
 \item[Andrés] I worked on training a CNN model, based on the Homework 5 code, to classify the gender of a person's face included in an image. I then wrote a script to run this model on our database of randomly generated faces to classify each image as male or female. Finally, I followed a tutorial online to classify single images as male or female, as my model was not predicting the gender of single images correctly. I also did some work implementing the front end.
 \item[Claire] I worked on the code to swap faces using python dlib and open cv by following a tutorial from pysource. This code uses a preexisting model to detect the feature points of the face, divide the face into triangles, and replace the triangles of the second face with the triangles of the first.
-\item [Jed] I built the algorithm that attempts to detect whether the subject is similing. I also did most of the work for setting up the frontend and the backend server, including piping data over HTTP and integrating with the Web camera capture API.
+\item [Jed] I built the algorithm that attempts to detect whether the subject is smiling. I also did most of the work for setting up the frontend and the backend server, including piping data over HTTP and integrating with the Web camera capture API.
 \end{description}
 
 \end{document}
