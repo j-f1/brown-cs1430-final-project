@@ -17,6 +17,16 @@ function App() {
   const [faceID, setFaceID] = useState(null);
   const oldFaceIDRef = useRef(null);
 
+  if (window.__faceID && window.__faceID != faceID) {
+    setTimeout(() => {
+      const id = window.__faceID;
+      window.__faceID = null;
+      setFaceID(id);
+    }, 10);
+  }
+
+  console.log(faceID);
+
   /** @type {React.MutableRefObject<HTMLFormElement>} */
   const formRef = useRef();
   /** @type {React.MutableRefObject<number>} */
@@ -57,7 +67,7 @@ function App() {
       data.set("height", faceRects[0].height);
       data.set("sex", sex);
       data.set("teeth", faceRects[0].teeth_heuristic);
-      data.set("face_id", faceID);
+      data.set("face_id", faceID || window.__faceID);
       fetch(SERVER + "/swap", {
         method: "POST",
         body: data,

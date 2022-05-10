@@ -29,6 +29,7 @@ face_landmarks_predictor = shape_predictor(shape_predictor_path)
 
 def swap_face(img_path1, img2, dest_face):
     # source image
+    print(img_path1)
     src_img_path = img_path1
     src_img = cv2.cvtColor(cv2.imread(src_img_path, 1), cv2.COLOR_BGR2RGB)
     bw_src_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
