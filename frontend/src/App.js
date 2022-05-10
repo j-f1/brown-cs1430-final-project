@@ -38,7 +38,7 @@ function App() {
       .then(({ image, faces, sex }) => {
         console.log((+new Date() - startRef.current) / 1e3);
         console.log(faces);
-        console.log(sex)
+        console.log(sex);
         setSex(sex);
         setImage(image);
         setFaceRects(faces);
@@ -163,7 +163,12 @@ function App() {
         )}
         {!usingCamera && (
           <Form onSubmit={onToggleCamera}>
-            <Button className="mt-2" size="sm" type="submit" variant="success">
+            <Button
+              className="mt-2"
+              size="sm"
+              type="submit"
+              variant="secondary"
+            >
               Use Camera
             </Button>
           </Form>
@@ -175,21 +180,16 @@ function App() {
               setFaceID(null);
             }}
           >
-            <Button
-              className="mt-2"
-              size="sm"
-              type="submit"
-              variant="secondary"
-            >
+            <Button className="mt-2" size="sm" type="submit" variant="success">
               Change Face
             </Button>
           </Form>
         )}
-        <Form onSubmit={onSwap}>
+        {/* <Form onSubmit={onSwap}>
           <Button className="mt-2" size="sm" type="submit">
             Swap Faces
           </Button>
-        </Form>
+        </Form> */}
         <Form onSubmit={clear}>
           <Button className="mt-2" size="sm" type="submit" variant="danger">
             Clear Image
